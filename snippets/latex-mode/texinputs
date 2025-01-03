@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: texinputs
+# key: env
+# group: elisp
+# --
+%%% Local Variables:
+%%% mode: latex
+%%% eval: (setenv "TEXINPUTS" "./styles::")
+%%% End:

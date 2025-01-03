@@ -1,0 +1,60 @@
+# -*- mode: snippet -*-
+# name: Chinese statement letter
+# key: letter
+# group: templates
+# expand-env: ((yas-indent-line 'fixed))
+# --
+% rubber: module xelatex
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=30mm,centering]{geometry}
+
+\usepackage{times}
+\usepackage[UTF8]{ctex}  % STHeiti, STFangsong, SimSun
+\setCJKmainfont[AutoFakeBold={2.4},AutoFakeSlant={0.2}]{Adobe Song Std}
+\setCJKsansfont{PingFang SC}
+
+\usepackage{setspace}
+\doublespacing
+
+\usepackage{latexsym,amsmath,amssymb,amsfonts,mathrsfs,
+            mathtools, amsthm}
+\usepackage{arydshln}   % To support partitioned matrix with dashed lines
+\usepackage{empheq}     % to deal with parentheses + subfunctions
+\usepackage{enumitem}   % [noitemsep, topsep=-5pt], [label=\roman*]
+
+\usepackage{float, graphicx, caption, subcaption}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=magenta,citecolor=blue,
+            urlcolor=cyan,filecolor=red]{hyperref}
+\usepackage{cite}
+% ---------------- END Preambles ----------------
+
+\title{\sf XXXXXX}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+%\pagestyle{empty}
+
+% ----------------- MAIN --------------------
+\noindent
+\textbf{尊敬的XXX}:\hfill \medskip
+
+$0
+
+% ----------------- SIGNATURE --------------------
+\bigskip
+此致\\\\ 敬礼！
+
+\bigskip
+\hfill 声请人：岳作功
+
+\hfill\today
+
+% --------------- BIBLIOGRAPHY --------------
+% \bibliographystyle{plain}
+% \bibliography{library}
+
+\end{document}

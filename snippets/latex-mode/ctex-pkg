@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: ctex package
+# key: ctexpkg
+# group: preambles
+# expand-env: ((yas-indent-line 'fixed))
+# --
+% rubber: module xelatex
+\usepackage[UTF8]{ctex}
+
+\usepackage{times}      % STHeiti, STFangsong, SimSun
+\setCJKmainfont[AutoFakeBold={2.4},AutoFakeSlant={0.2}]{STSong}
+% \setCJKmainfont[BoldFont={STHeiti},AutoFakeSlant={0.2}]{STSong}

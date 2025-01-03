@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: ox-reveal
+# key: reveal
+# expand-env: ((yas-indent-line 'fixed))
+# group: templates
+# --
+#+TITLE:    ${1:Title}
+#+AUTHOR:   Zuogong Yue
+#+EMAIL:    oracleyue@gmail.com
+#+DATE:     ${2:Date}
+#+HTML_HEAD: 
+#+HTML_HEAD_EXTRA: 
+
+
+
+$0

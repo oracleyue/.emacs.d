@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: center texts
+# key: center
+# group: environments
+# expand-env: ((yas-indent-line 'fixed))
+# --
+\begin{center}
+  $0
+\end{center}

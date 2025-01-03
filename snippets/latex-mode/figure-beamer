@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: figure (beamer)
+# key: fig
+# group: beamer
+# expand-env: ((yas-indent-line 'fixed))
+# --
+\begin{figure}
+  \centering
+  \includegraphics[width=.9\textwidth]{figures/${1:figname}}
+  \caption{(Figure from (Bishop, 2006))}
+\end{figure}

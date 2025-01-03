@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: titlepage
+# key: title
+# group: beamer
+# --
+\title[]{${1:title}}
+\subtitle{${2:}}
+\author{Zuogong Yue$^{1,2}$, J. Thunberg$^{1,3}$, L. Ljung$^4$, J. Goncalves$^{1,5}$}
+\institute[]{
+    \begin{tabular}{@{\;}ll}
+      $^1$ Luxembourg Centre for Systems Biomedicine, LU\\
+      $^2$ University of New South Wales, Australia \\
+      $^3$ Halmstad University, Sweden\\
+      $^4$ Link\"{o}ping University, Sweden\\
+      $^5$ University of Cambridge, UK
+    \end{tabular}}
+\date{12 Dec 2019 $\cdot$ CDC 2019 $\cdot$ Nice, France}

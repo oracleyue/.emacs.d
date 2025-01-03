@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: single frame with huge title
+# key: part
+# group: beamer
+# --
+\begin{frame}
+  \begin{secpage}
+    $0
+  \end{secpage}
+\end{frame}

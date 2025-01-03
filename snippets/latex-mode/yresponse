@@ -1,0 +1,91 @@
+# -*- mode: snippet -*-
+# name: Responses to reviewers
+# key: response
+# group: templates
+# expand-env: ((yas-indent-line 'fixed))
+# --
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=30mm]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times,helvet}
+\usepackage[scaled=0.95]{inconsolata}
+
+\usepackage{latexsym,amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage{enumitem}
+
+\usepackage{setspace}  \onehalfspacing
+\usepackage{titlesec}
+\titleformat{\section}{\large\scshape}{\thesection.}{1em}{}
+
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{subcaption}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=magenta,citecolor=blue]{hyperref}
+\usepackage[round,sort]{natbib}
+
+\let\openbox\undefined
+\usepackage{amsthm,thmtools,xcolor}
+\newenvironment{review}{
+  \par\bigskip\upshape\color{black}\noindent
+  \textbf{\upshape\color{black}Comments:}}{}
+\declaretheoremstyle[
+  headfont=\color{black}\normalfont\bfseries,
+  bodyfont=\color{black}\normalfont\upshape,
+  headpunct=:,
+]{response}
+\declaretheorem[style=response, name=Response]{response}
+\newenvironment{update}{
+  \color{blue}\noindent
+  \textbf{\upshape\color{black}Updates:}}{}
+
+\begin{document}
+\title{Author's Response to Reviewers and \\ Statement of Changes}
+\author{}
+\date{}
+\maketitle
+% \thispagestyle{empty}
+% \tableofcontents  % add toc if many pages
+
+% ----------------- MAIN --------------------
+
+\section{Statement of Changes}
+\label{sec:statement-changes}
+
+We sincerely thank the associate editor and the reviewers for their very
+careful evaluation of our paper. We are very grateful for their insightful
+comments that help us to improve the quality of our paper.
+A list of changes is summarised below:
+\begin{itemize}
+\item XXX XXX
+\item XXX XXX
+\end{itemize}
+
+\section{ReviewXXXXXXXX (Reviewer~X)}
+\label{sec:review-X}
+
+% review comments here
+\begin{review}
+    blah blah...
+\end{review}
+
+% author's responses here
+\begin{response}\label{resp:XXX}
+    blah blah... referred to by Response~\ref{resp:XXX}
+\end{response}
+
+% place updates
+\begin{update}
+    blah blah...
+\end{update}
+
+
+% --------------- BIBLIOGRAPHY --------------
+% \def\bibfont{\small}
+% \bibliographystyle{abbrvnat}  % plainnat,abbrvnat,unsrtnat; natbib
+% \bibliography{./ref/library}
+
+\end{document}

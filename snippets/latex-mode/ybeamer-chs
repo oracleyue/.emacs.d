@@ -1,0 +1,89 @@
+# -*- mode: snippet -*-
+# name: Beamer Template (Chinese)
+# key: beamer
+# group: templates
+# expand-env: ((yas-indent-line 'fixed))
+# --
+% rubber: module xelatex
+\documentclass[10pt,aspectratio=1610]{beamer}
+% options: notes,handout; aspectratio=169,1610,149,54,43,32
+\usepackage[sans,serifmath,ctex]{styles/zyuebeamer}
+% options: bibentry, sans, serifmath/txmath, ntoc, dark, ctex (use Xelatex)
+% macros: \hl{}; env.: mdframed, hlblock, notes (adding footnotes)
+
+% Packages
+\usepackage{latexsym, amsmath, amssymb, amsfonts,
+            arydshln, mathrsfs, mathtools, upgreek}
+\usepackage{algorithm,algpseudocode}
+\hypersetup{colorlinks,linkcolor=,urlcolor=blue}
+
+% Citations
+\addbibresource{./ref/library.bib}
+
+% Macros
+% \input{userdef-mathsym}
+
+% Title Page
+\title[]{${1:title}}
+\subtitle{${2:}}
+\author{\small 岳作功}
+\institute[]{
+  \footnotesize
+  \begin{tabular}{@{}l}
+    人工智能与自动化学院 华中科技大学
+  \end{tabular}
+}
+\date{\footnotesize 2021年9月15日 $\cdot$ 月会 $\cdot$ 武汉}
+% use yasnippet key "logo" to insert logos
+\titlegraphic{
+  \begin{tikzpicture}[overlay, remember picture]
+    \node[xshift=-7mm, yshift=-5mm, anchor=north east]
+    at (current page.north east) {%
+      \includegraphics[height=.09\textwidth]{styles/logos/hust}};
+  \end{tikzpicture}}
+
+\begin{document}
+
+% ---- Title Page ----
+\setbeamertemplate{footline}{}				% remove page number
+\begin{frame}
+  \titlepage
+\end{frame}
+\setbeamertemplate{footline}[frame number]  % reset page number
+\setcounter{framenumber}{0}
+
+% ---- Main Part ----
+
+$0
+
+
+
+% ---- Thanks Frame ----
+\section*{Thanks}
+\setbeamertemplate{footline}{}  % remove page number
+
+\begin{frame}
+    \vspace*{1cm}
+    \begin{center}
+      {\Huge \bf \textcolor{alertColor}{Thank you!}} \\\
+      \bigskip
+      \bigskip
+      \includegraphics[width=10cm]{styles/unix_happy.png}
+    \end{center}
+\end{frame}
+
+% ---- Bibliography ----
+% use /biblatex/: adding the bibliography frame
+\begin{frame}[allowframebreaks]  % use the option if more than 1 page
+  \frametitle{\bibname}
+  \printbibliography
+\end{frame}
+
+% ---- Appendix ----
+% \appendix
+% \begin{frame}
+%   \frametitle{Appendix: ...}
+%
+% \end{frame}
+
+\end{document}

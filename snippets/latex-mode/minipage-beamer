@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: centered minipage
+# key: minipage
+# group: beamer
+# expand-env: ((yas-indent-line 'fixed))
+# --
+\begin{center}
+  \begin{minipage}{.9\textwidth}
+    $0
+  \end{minipage}
+\end{center}

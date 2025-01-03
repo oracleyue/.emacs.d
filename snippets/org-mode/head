@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: org
+# key: head
+# expand-env: ((yas-indent-line 'fixed))
+# group: templates
+# --
+#+TITLE:    ${1:Title}
+#+AUTHOR:   Zuogong Yue
+#+EMAIL:    oracleyue@gmail.com
+#+DATE:     `(zyue/insert-date)`
+#+STARTUP:  indent
+#+OPTIONS:  H:6 num:t toc:t ^:nil _:nil \n:nil LaTeX:t
+
+
+$0

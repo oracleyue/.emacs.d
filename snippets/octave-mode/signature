@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: signature
+# key: sig
+# group: headers
+# expand-env: ((yas-indent-line 'fixed))
+# --
+% Copyright (c) `(insert (format-time-string "%Y"))`, Zuogong YUE
+% Author: Zuogong YUE <oracleyue@gmail.com>
+%         https://github.com/oracleyue
+% Licensed under the GNU General Public License
+%
+% Last update on `(zyue/insert-date)`

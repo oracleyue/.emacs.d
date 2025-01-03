@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: text color
+# key: c
+# group: macros
+# --
+\color{${1:black}} $0

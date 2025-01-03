@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: title
+# key: t
+# group: templates
+# --
+#+TITLE:     ${1:title here}
+#+AUTHOR:    Zuogong Yue
+#+STARTUP:   content
+
+$0

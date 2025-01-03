@@ -1,0 +1,71 @@
+# -*- mode: snippet -*-
+# name: list of fonts
+# key: list
+# group: preambles
+# --
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Serif
+\usepackage{lmodern}      % computer modern with enhancement
+\usepackage{times}        % use Times; or "newtxtext" for new times
+\usepackage{fouriernc}    % use New Century Schoolbook
+
+\usepackage{charter}      % nice for regular texts (e.g. novel, blog)
+\usepackage{cochineal}    % fork of crimson (12pt)
+\usepackage{baskervald}   % variant: "Baskervaldx"
+\usepackage{palatino}     % Palatino
+\usepackage{tgpagella}    % TeX Gyre Pagella
+
+% Sans
+\usepackage{lmodern}      % computer modern with enhancement on sans
+\usepackage{helvet}
+
+% Monospace
+\usepackage[scaled=0.95]{inconsolata}
+\usepackage[scaled=.8]{DejaVuSansMono}
+
+% Math Fonts for Times
+\usepackage[varvw]{newtxmath}  % [varvw] gets rounded bottoms of "v, w"
+\usepackage[lite,straightbraces]{mtpro2}    % non-free math fonts
+\usepackage{mathptmx}
+\usepackage{txfonts}
+
+% Math Fonts for Charter
+\usepackage{charter,newtxmath}
+% OR
+\usepackage{XCharter}     % extended pkg for charter
+\usepackage[xcharter]{newtxmath}
+
+% Math Fonts for Palatino or TeX Gyre Pagella
+\usepackage[sc]{mathpazo}
+\linespread{1.05}         % Palladio needs more leading (space between lines)
+
+% Chinese
+% (Std.) STSong, STHeiti, STXihei, STKaiTi, STFangsong
+% (Windows) SimSun, SimHei, FangSong, Microsoft Yahei
+% (Mac) PingFang SC, Hiragino Sans GB (苹果丽黑)
+% (Linux) WenQuanYi Micro Hei
+% (Adobe) Adobe Song Std, Adobe Heiti Std, Adobe FangSong Std, Adobe Kaiti Std
+% Notes:
+% - LaTeX default mainfont: STSong
+%   - bold font: STHeiti,
+%   - italic font: STKaiti
+% - LaTeX default sansfont: STXihei
+
+\usepackage[UTF8]{ctex}
+
+\setCJKmainfont[BoldFont={STHeiti},ItalicFont={STKaiti}]{SimSun}
+\setCJKsansfont{STKaiti}
+
+\setCJKmainfont[AutoFakeBold={2.4},AutoFakeSlant={0.2}]{Adobe Song Std}
+\setCJKsansfont{PingFang SC}
+
+\setCJKmainfont[BoldFont={STHeiti},AutoFakeSlant={0.2}]{STSong}
+\setCJKsansfont{STKaiti} % sans: STKaiti; mono: fangsong
+
+\setCJKmainfont[AutoFakeBold={4.2},AutoFakeSlant={0.2}]{STFangsong}
+\setCJKsansfont{STHeiti} % sans: STKaiti; mono: fangsong
+
+% Nice fonts for Powerpoint or Keynote
+% - Century Schoolbook

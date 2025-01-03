@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: bash script head
+# key: head
+# group: templates
+# --
+#!/bin/bash
+# -*- coding: utf-8 -*-
+#
+# $0
+
+# Copyright (c) ${1:2014-2017}, Zuogong YUE
+# Licensed under the GNU General Public License
+#
+# Last modified on

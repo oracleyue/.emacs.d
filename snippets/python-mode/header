@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: script header
+# key: head
+# group: oracleyue
+# --
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+$0
