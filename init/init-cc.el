@@ -16,14 +16,17 @@
 (use-package cc-mode
   :ensure nil
   :bind (:map c-mode-base-map
-              ("C-c C-c" . compile)))
+              ("<f12>" . compile))
+  :init (setq-default c-basic-offset 4)
 
-;; /smartparens/: insert pair of symbols
-;; when you press RET, the curly braces automatically add another newline
-(with-eval-after-load "smartparens"
-  (sp-with-modes '(c-mode c++-mode)
-    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-    (sp-local-pair "/*" "*/" :post-handlers '(("| " "SPC") ("* ||\n[i]" "RET")))))
+  :config
+  ;; ---------------- Smartparens ------------------
+  (with-eval-after-load "smartparens"
+    (sp-with-modes '(c-mode c++-mode)
+      (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+      (sp-local-pair "/*" "*/" :post-handlers '(("| " "SPC") ("* ||\n[i]" "RET")))))
+  ;; when you press RET, the curly braces automatically add another newline
+  ) ;End of cc-mode
 
 ;; ------------------------------------------------
 ;; supports for /cmake/

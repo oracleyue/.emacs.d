@@ -38,7 +38,7 @@
   (defun zyue/cmake-setup-compile ()
     (setq compile-command "cd build/ && cmake .. && make -k")
     (add-hook 'compilation-finish-functions 'zyue/link-compile-commands-json)
-    (define-key cmake-mode-map (kbd "C-c C-c") 'compile))
+    (define-key cmake-mode-map (kbd "<f12>") 'compile))
 
   (defun clean-all ()
     (interactive)

@@ -3,11 +3,26 @@
 ;; ================================================================
 ;; Last modified on 25 Dec 2024
 
+;; Tree-sitter
+(when *use-treesitter*
+  (use-package treesit-auto
+    :demand
+    :init
+    (setq treesit-auto-install    'prompt
+          treesit-font-lock-level 3)    ; 4 for everything
+    :config
+    (global-treesit-auto-mode))
+  ) ;End of if check
+
+;; LSP Client
 (use-package eglot
   :ensure nil
-  :hook ((python-mode . eglot-ensure)
+  :hook (((python-mode python-ts-mode) . eglot-ensure)
          ;; (octave-mode . eglot-ensure)
-         ((c-mode c++-mode) . eglot-ensure))
+         ((c-mode c-ts-mode)     . eglot-ensure)
+         ((c++-mode c++-ts-mode) . eglot-ensure))
+  :init (setq eglot-autoshutdown t)
+  :hook (eglot-managed-mode . (lambda () (eglot-inlay-hints-mode -1)))
   :bind (:map prog-mode-map
               ;; M-./M-, for xref jump to def and back
               ;; C-M-i   for code completion
@@ -24,7 +39,7 @@
   ;; C/C++
   ;; ------------------------------------------------
   (add-to-list 'eglot-server-programs
-               '((c-mode c++-mode)
+               '((c-mode c++-mode c-ts-mode c++-ts-mode)
                  . ("clangd"
                     "-j=12"
                     "--background-index"

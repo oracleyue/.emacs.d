@@ -268,8 +268,7 @@
       ("Action"
        ((";" eglot-rename "rename")
         ("f" eglot-format "format")
-        ("a" eglot-code-action "action")
-        ("H" eglot-inlay-hints-mode "toggle hints"))
+        ("a" eglot-code-action "action"))
 
        "Jumping"
        (("." xref-find-definitions "definition")

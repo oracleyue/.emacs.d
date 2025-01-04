@@ -37,6 +37,12 @@
 ;; auto-completion engine (corfu, company, capf (taken over by Ivy/Vertico))
 (defconst *ac-engine* 'corfu)   ; nil to use built-in *Completion* buffer
 
+;; tree-sitter
+(defconst *use-treesitter*
+  (and t
+       (fboundp 'treesit-available-p)
+       (treesit-available-p)))
+
 ;; hydra supports
 (defconst *use-hydra* t)
 

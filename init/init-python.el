@@ -45,7 +45,7 @@
   (add-hook 'python-mode-hook #'zyue-py-indent-style)
 
   ;; ---------------- Linting ----------------
-  ;; lsp-mode uses "lsp" linter and sets "flycheck-checker" to disable others
+  ;; use LSP client (eglot, lsp-bridge) for linting
 
   ;; ---------------- Virtual Environments ----------------
   (use-package pyvenv
