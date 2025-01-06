@@ -38,16 +38,13 @@
   (setq-default TeX-insert-braces nil)
   (setq-default LaTeX-electric-left-right-brace nil)
   (eval-after-load "latex" '(define-key LaTeX-mode-map "$" nil))
+
   ;; use /smartparens/ instead
-  (with-eval-after-load "smartparens"
-    (require 'smartparens-latex)
+  (with-eval-after-load 'smartparens
     (sp-with-modes '(latex-mode LaTeX-mode)
       (sp-local-pair "\\|" "\\|"
                      :trigger "\\|"
                      :unless '(sp-latex-point-after-backslash)
-                     :when '(sp-in-math-p))
-      (sp-local-pair "\\left|" "\\right|"
-                     :trigger "\\l|"
                      :when '(sp-in-math-p))
       (sp-local-pair "\\big(" "\\big)"
                      :trigger "\\b("
@@ -61,8 +58,7 @@
                      :trigger "\\b["
                      :when '(sp-in-math-p)
                      :post-handlers '(sp-latex-insert-spaces-inside-pair))
-      (sp-local-pair "$" "$"
-                     :actions '(insert wrap navigate))))
+      ))
 
   ;; More math-mode in LaTeX
   (setq LaTeX-math-list

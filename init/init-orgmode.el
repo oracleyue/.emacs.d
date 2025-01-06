@@ -222,15 +222,6 @@
   ;; "☰" "☷" "☲" "☵" "⦿" "✿" "✸" "●" "⟐" "◆" "►"
   :hook (org-mode . org-superstar-mode))
 
-;; /smartparens/ for org-mode
-(with-eval-after-load "smartparens"
-  (sp-with-modes 'org-mode
-    (sp-local-pair "$" "$"
-                   :unless '(sp-latex-point-after-backslash)
-                   :actions '(insert wrap autoskip navigate escape))
-    (sp-local-pair "'" "'" :unless '(sp-point-after-word-p)
-                   :actions '(insert wrap autoskip navigate escape))))
-
 ;; /org-download/ for image insertion
 (use-package org-download
   :demand

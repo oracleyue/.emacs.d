@@ -86,6 +86,15 @@
     :demand
     :hook (dired-mode . all-the-icons-dired-mode)))
 
+;; /dired-sidebar/: show directory in the sidebar (like Vim nerdtree)
+;; usage: "^" directory up, and other dired operations
+(use-package dired-sidebar
+  :demand
+  :init
+  (setq dired-sidebar-theme 'nerd-icons
+        dired-sidebar-should-follow-file t)
+  :bind ("s-0" . dired-sidebar-toggle-sidebar))
+
 ;; ------------------------------------------------
 ;; /ibuffer/: manage opened buffers
 ;; ------------------------------------------------

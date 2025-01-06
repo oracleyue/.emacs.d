@@ -135,12 +135,12 @@
   :demand
   :diminish
   :bind (:map prog-mode-map
-              ("M-I" . symbol-overlay-put)
+              ("M-s o"   . symbol-overlay-put)
               ("M-n" . symbol-overlay-jump-next)
               ("M-p" . symbol-overlay-jump-prev)
-              ("M-N" . symbol-overlay-switch-forward)
-              ("M-P" . symbol-overlay-switch-backward)
-              ("M-C" . symbol-overlay-remove-all))
+              ("M-s C-a" . symbol-overlay-jump-first)
+              ("M-s C-e" . symbol-overlay-jump-last)
+              ("M-s C-c" . symbol-overlay-remove-all))
   :hook ((prog-mode      . symbol-overlay-mode)
          (LaTeX-mode     . (lambda () (symbol-overlay-mode -1)))
          (iedit-mode     . (lambda () (symbol-overlay-mode -1)))
@@ -268,7 +268,9 @@
       ("Action"
        ((";" eglot-rename "rename")
         ("f" eglot-format "format")
-        ("a" eglot-code-action "action"))
+        ("a" eglot-code-action "action")
+        ("b" flymake-show-buffer-diagnostics "flymake (buf)")
+        ("l" flymake-show-project-diagnostics "flymake (proj)"))
 
        "Jumping"
        (("." xref-find-definitions "definition")
@@ -277,19 +279,21 @@
         ("i" eglot-find-implementation "implementation")
         ("," xref-go-back "return"))
 
-       "Help"
-       (("b" flymake-show-buffer-diagnostics "diagnosis (buffer)")
-        ("l" flymake-show-project-diagnostics "diagnosis (project)")
-        ("h" eldoc "eldoc")
-        ("d" dash-at-point "dash doc"))
-
        "Citre"
        (("p" citre-peek "peek")
         ("A" citre-ace-peek "ace peek")
         ("j" citre-query-jump "query jump (def)")
         ("J" citre-query-jump-to-reference "query jump (ref)")
         ("P" citre-query-peek-reference "query peek (ref)")
-        ("U" citre-update-this-tags-file "update/create tags"))))
+        ("U" citre-update-this-tags-file "update/create"))
+
+       "SymOverlay"
+       (("C-n" symbol-overlay-jump-next "next")
+        ("C-p" symbol-overlay-jump-prev "previous")
+        ("C-a" symbol-overlay-jump-first "first")
+        ("C-e" symbol-overlay-jump-last "last")
+        ("M-n" symbol-overlay-switch-forward "sym forward")
+        ("M-p" symbol-overlay-switch-backward "sym backward"))))
   ) ;End of hydra def
 
 

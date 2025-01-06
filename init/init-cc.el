@@ -18,15 +18,13 @@
   :bind (:map c-mode-base-map
               ("<f12>" . compile))
   :init (setq-default c-basic-offset 4)
-
   :config
-  ;; ---------------- Smartparens ------------------
-  (with-eval-after-load "smartparens"
+  ;; /smartparens/ support
+  (with-eval-after-load 'smartparens
     (sp-with-modes '(c-mode c++-mode)
       (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-      (sp-local-pair "/*" "*/" :post-handlers '(("| " "SPC") ("* ||\n[i]" "RET")))))
-  ;; when you press RET, the curly braces automatically add another newline
-  ) ;End of cc-mode
+      (sp-local-pair "/*" "*/" :post-handlers '(("| " "SPC") ("* ||\n[i]" "RET"))))
+    ))
 
 ;; ------------------------------------------------
 ;; supports for /cmake/

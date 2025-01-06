@@ -11,8 +11,10 @@
     (setq treesit-auto-install    'prompt
           treesit-font-lock-level 3)    ; 4 for everything
     :config
-    (global-treesit-auto-mode))
-  ) ;End of if check
+    (global-treesit-auto-mode)
+    ;; fix for Yasnippet: workaround for https://github.com/renzmann/treesit-auto/issues/76
+    (setq major-mode-remap-alist (treesit-auto--build-major-mode-remap-alist))
+    ))
 
 ;; LSP Client
 (use-package eglot

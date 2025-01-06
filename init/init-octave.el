@@ -45,7 +45,7 @@
   ;; - completion via ctags in "completion-at-point" ("C-M-i")
 
   ;; /smartparens/ supports
-  (with-eval-after-load "smartparens"
+  (with-eval-after-load 'smartparens
     (sp-with-modes 'octave-mode
       (sp-local-pair "'" "'" :unless '(sp-point-after-word-p)
                      :actions '(insert wrap autoskip navigate))))

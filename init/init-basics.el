@@ -44,6 +44,12 @@
 (setq-default cursor-type 'bar) ; "bar", "box" (default)
 (blink-cursor-mode t)           ; -1 stops cursor blinking
 
+;; adjust font size
+;; use C-x C-0/C--/C-+ or Hydra "M-g SPC"
+(dolist (key (list (kbd "s-0") (kbd "s-=")
+                   (kbd "s--") (kbd "s-+")))
+  (unbind-key key))
+
 ;; daemons and clients
 ;;   - "main"    for general purpose (light-theme, startup folders)
 ;;   - "coding"  for coding (dark-theme, startup folders)
@@ -254,45 +260,42 @@
 (use-package smartparens
   :demand
   :diminish
-  :bind (:map smartparens-mode-map
-              ;; nativation
-              ("C-M-f"   . sp-forward-sexp)
-              ("C-M-b"   . sp-backward-sexp)
-              ("C-M-d"   . sp-down-sexp)
-              ("C-M-u"   . sp-up-sexp)
-              ("C-M-n"   . sp-next-sexp)
-              ("C-M-p"   . sp-previous-sexp)
-              ("C-S-a"   . sp-beginning-of-sexp)
-              ("C-S-e"   . sp-end-of-sexp)
-              ;; mark
-              ("C-M-SPC" . sp-mark-sexp)
-              ;; warp, unwrap and rewrap
-              ("C-M-s"   . sp-splice-sexp)
-              ("C-M-w"   . sp-rewrap-sexp)
-              ;; kill, copy
-              ("C-M-k"   . sp-kill-sexp)
-              ;; expand and contract
-              ("C-<right>"    . sp-forward-slurp-sexp)
-              ("C-<left>"     . sp-forward-barf-sexp)
-              ("C-M-<left>"   . sp-forward-slurp-sexp)
-              ("C-M-<right>"  . sp-forward-barf-sexp)
-              ;; split, join and raise
-              ("C-M-t"   . sp-split-sexp)
-              ("C-M-j"   . sp-join-sexp)
-              ("C-M-r"   . sp-raise-sexp))
+  :bind (;; nativation
+         ("C-M-f"   . sp-forward-sexp)
+         ("C-M-b"   . sp-backward-sexp)
+         ("C-M-d"   . sp-down-sexp)
+         ("C-M-u"   . sp-up-sexp)
+         ("C-M-n"   . sp-next-sexp)
+         ("C-M-p"   . sp-previous-sexp)
+         ("C-S-a"   . sp-beginning-of-sexp)
+         ("C-S-e"   . sp-end-of-sexp)
+         ;; mark
+         ("C-M-SPC" . sp-mark-sexp)
+         ;; warp, unwrap and rewrap
+         ("C-M-s"   . sp-splice-sexp)
+         ("C-M-w"   . sp-rewrap-sexp)
+         ;; kill, copy
+         ("C-M-k"   . sp-kill-sexp)
+         ;; expand and contract
+         ("C-<right>"    . sp-forward-slurp-sexp)
+         ("C-<left>"     . sp-forward-barf-sexp)
+         ("C-M-<left>"   . sp-forward-slurp-sexp)
+         ("C-M-<right>"  . sp-forward-barf-sexp)
+         ;; split, join and raise
+         ("C-M-t"   . sp-split-sexp)
+         ("C-M-j"   . sp-join-sexp)
+         ("C-M-r"   . sp-raise-sexp))
   :config
   (require 'smartparens-config) ;; default config
-  (smartparens-global-mode 1)
-  ;; highlight pairs (e.g. brackets)
-  ;; (show-smartparens-global-mode 1)
-  (with-eval-after-load 'smartparens  ;; use default /show-paren/
-    (show-smartparens-global-mode -1)
-    (show-paren-mode t))  ;; fixes huge delay when hit Enter after "do" in bash "FOR" loop
-  ;; disable highlights between pairs firstly inserted
-  (setq sp-highlight-pair-overlay nil)
-  ;; disable smartparens for specific modes
-  ;; (add-to-list 'sp-ignore-modes-list 'latex-mode)
-  )
+
+  ;; enable to highligh pairs
+  (show-smartparens-global-mode 1)
+  ;; if bugs, use built-in /show-paren/ instead
+  ;; (show-paren-mode t)
+
+  ;; enable smartparens
+  (add-hook 'prog-mode-hook  'turn-on-smartparens-mode)
+  (add-hook 'LaTeX-mode-hook 'turn-on-smartparens-mode))
 
 ;; ----------------------------------------------
 ;; /bash-completion/: TAB complete alias and functions
