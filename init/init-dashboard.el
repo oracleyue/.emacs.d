@@ -31,9 +31,13 @@
         dashboard-set-file-icons    t)
   ;; items
   (setq dashboard-projects-backend 'projectile)
-  (setq dashboard-items '((projects  . 8)
-                          (bookmarks . 8)
-                          (recents   . 5)))
+  (if *is-server-m*
+      (setq dashboard-items '((projects  . 5)
+                              (bookmarks . 5)
+                              (recents   . 5)))
+    (setq dashboard-items '((projects  . 8)
+                            (bookmarks . 8)
+                            (recents   . 5))))
   (dashboard-modify-heading-icons '((projects  . "nf-oct-rocket")
                                     (recents   . "nf-oct-history")
                                     (bookmarks . "nf-oct-bookmark")))

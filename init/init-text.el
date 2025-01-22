@@ -10,14 +10,16 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;; ---------------------------------------------
-;; Spell checking
+;; English spelling checker
 ;; ---------------------------------------------
-;; auto-correct words: "C-." or "C-M-i"
-(use-package flyspell
-  :demand
-  :diminish
+(use-package flyspell-correct)
+
+(use-package ispell
+  :ensure nil
+  :init
+  (setq ispell-program-name "aspell"
+        ispell-dictionary   "british")
   :hook (text-mode . flyspell-mode)
-  :init (setq ispell-dictionary "british")
   :config
   (defun zyue/toggle-dictionary ()
     "Toggle flyspell dictionary between the American and the British."
@@ -28,8 +30,14 @@
     (ispell-kill-ispell t)
     (message "%s" ispell-dictionary)))
 
+(eval-after-load 'flyspell
+  '(progn
+     (define-key flyspell-mode-map (kbd "C-.")     'flyspell-correct-previous)
+     ;; restore default keybindings
+     (define-key flyspell-mode-map (kbd "M-<tab>") 'completion-at-point)))
+
 ;; ---------------------------------------------
-;; Distraction-free writing
+;; Writing in distraction-free mode
 ;; ---------------------------------------------
 (use-package olivetti
   :demand
@@ -44,22 +52,6 @@
 ;; Show key strokes & commands in demo of Emacs
 ;; ---------------------------------------------
 (use-package command-log-mode)
-
-;; ---------------------------------------------
-;; /Grammarly/ for English checking
-;; ---------------------------------------------
-(use-package grammarly  ;; Grammarly API interface
-  :disabled
-  :config
-  (use-package flycheck
-    :diminish
-    :hook ((text-mode   . flycheck-mode)
-           (LaTeX-mode  . flycheck-mode))
-    :config
-    (add-hook 'org-mode-hook (lambda () (flycheck-mode -1))))
-  ;; flycheck interface for Grammarly
-  ;; grammarly available for: text, latex, org, markdown
-  (use-package flycheck-grammarly :demand))
 
 
 (provide 'init-text)

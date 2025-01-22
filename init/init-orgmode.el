@@ -25,8 +25,8 @@
       (progn (require 'org-variable-pitch)
              (org-variable-pitch-minor-mode t)
              (setq line-spacing '0.25)
-             (setq-local fill-column *fill-column-sans*))
-    (setq-local fill-column *fill-column-mono*)))
+             (setq-local fill-column 90))
+    (setq-local fill-column 72)))
 (add-hook 'org-mode-hook #'y/set-view-style-orgmode)
 
 ;; show inline images
@@ -52,9 +52,9 @@
 ;; /GTD Function Extensions/
 ;; refer to http://doc.norang.ca/org-mode.html
 (setq gtd-home (expand-file-name
-                "~/Public/Dropbox/oracleyue/GTD/"))
+                "~/Public/Dropbox/GTD/"))
 (setq note-home (expand-file-name
-                 "~/Public/Dropbox/oracleyue/Notebooks/Research/"))
+                 "~/Public/Dropbox/Notebooks/Research/"))
 (setq todo-file    (expand-file-name "ToDoList.org" gtd-home))
 (setq archive-file (expand-file-name "ArchivedDiary.org" gtd-home))
 (setq temp-todo-file    (expand-file-name "inbox.org" gtd-home)) ;; used by iOS app
@@ -112,7 +112,7 @@
 (defface org-doing
   '((t :foreground "white" :background "#75B5AA" :underline t))
   "Face for my own tag DOING."
-  :group 'oracleyue)
+  :group 'zyue)
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "DOING(i)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
@@ -252,6 +252,10 @@
   :config
   (eval-after-load "org" '(require 'ox-gfm nil t)))
 
+;; ------------------------------------------------------------
+;; Major Extensions of Org Mode
+;; ------------------------------------------------------------
+
 ;; /ox-reveal/: presentation via orgmode
 (use-package ox-reveal
   :demand
@@ -266,12 +270,6 @@
   (setq org-reveal-title-slide
         "<h1>%t</h1><h3>%a</h3><h4>%e</h4><h4>%d</h4>"))
 
-;; /ledger-mode/: financial accounting
-;; provides Babel in org-mode for ledger src blocks.
-(use-package ledger-mode
-  :disabled
-  :ensure nil)
-
 ;; /org-ref/: citation and cross-reference
 (use-package org-ref
   :demand
@@ -281,7 +279,7 @@
   (setq bibtex-completion-bibliography
         '("~/Public/Dropbox/Academia/latex_templ/ref/library.bib")
         bibtex-completion-pdf-field "file"  ;; pdf file from bibtex entry
-        bibtex-completion-notes-path "~/Public/Dropbox/oracleyue/Notebooks/Papers/"
+        bibtex-completion-notes-path "~/Public/Dropbox/Notebooks/Papers/"
         bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
         ;; bibtex-completion-additional-search-fields '(keywords)
 
@@ -310,6 +308,30 @@
          ;; "C-c C-o" on org-ref key triggers "org-ref-citation-hydra/body"
          :map bibtex-mode-map
          ("C-c C-o" . org-ref-bibtex-hydra/body)))
+
+;; /org-roam/: bullet notes and organization
+(use-package org-roam
+  :custom
+  (org-roam-directory (file-truename "~/Public/Dropbox/Notebooks/RoamNotes"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; informative interface for vertical completion
+  (setq org-roam-node-display-template (concat "${title:*} "
+                                               (propertize "${tags:20}" 'face 'org-tag)))
+  ;; auto sync with sqlite3 database for org-roam
+  (org-roam-db-autosync-mode))
+;; (use-package org-roam-ui)   ;; browser UI for /org-roam/
+;; Usage:
+;; - create or search notes: "C-c n f"
+;; - create reference: [[]]
+;; - search references: "C-c n l"
+;; - convert a headline into a node: "org-id-get-create", "org-roam-refile"
 
 
 (provide 'init-orgmode)

@@ -33,6 +33,11 @@
   :type 'boolean
   :group 'elegant)
 
+;; fix bugs in endless errors in *Messages*
+(defface modeline nil
+  "Basic face for modeline in elegant theme."
+  :group 'elegant)
+
 ;; Apply faces
 (let ((class '((class color) (min-colors 88) (background light)))
       (bg           "#ffffff")
@@ -65,11 +70,11 @@
             (region            :background       ,fg-faded)
             (highlight         :inherit     elegant-subtle)
             (hl-line           :inherit     elegant-subtle)
+            (cursor            :inherit        default)
 
-            ;; (fixed-pitch       :inherit      default)
-            ;; (fixed-pitch-serif :inherit      default)
-            ;; (variable-pitch    :inherit      default)
-            (cursor            :inherit      default)
+            ;; (fixed-pitch       :inherit        default)
+            ;; (fixed-pitch-serif :inherit        default)
+            ;; (variable-pitch    :inherit        default)
 
             ;; Semantic
             (shadow            :inherit      elegant-faded)

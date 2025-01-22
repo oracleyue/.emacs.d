@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: time stamp
-# key: ts
-# expand-env: ((yas-indent-line 'fixed))
+# key: date
 # --
-Last modified on $0
+Last modified on `(zyue/insert-today)`

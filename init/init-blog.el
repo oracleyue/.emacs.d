@@ -28,7 +28,7 @@
   :config
   (setq deft-extensions '("org" "md")
         deft-default-extension "org"
-        deft-directory  "~/Public/Dropbox/oracleyue/Notebooks")
+        deft-directory  "~/Public/Dropbox/Notebooks")
   (setq deft-recursive t
         deft-filter-only-filenames t))
 
@@ -36,7 +36,7 @@
 (defun zyue/deft ()
   "Dired the notebook home directory."
   (interactive)
-  (progn (dired "~/Public/Dropbox/oracleyue/Notebooks")))
+  (progn (dired "~/Public/Dropbox/Notebooks")))
 ;; use "M-g f" to search files
 ;; use "M-g a" to search file contents
 

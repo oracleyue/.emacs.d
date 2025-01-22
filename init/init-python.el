@@ -35,22 +35,24 @@
   ;; tab/space detection
   (use-package dtrt-indent
     :diminish
-    :hook (python-mode . dtrt-indent-mode))
+    :hook (python-base-mode . dtrt-indent-mode))
 
   ;; indentation
   (defun zyue-py-indent-style ()
     (setq python-indent-offset 4
           tab-width 4
           python-indent-guess-indent-offset nil))
-  (add-hook 'python-mode-hook #'zyue-py-indent-style)
+  (add-hook 'python-base-mode-hook #'zyue-py-indent-style)
 
-  ;; ---------------- Linting ----------------
-  ;; use LSP client (eglot, lsp-bridge) for linting
+  ;; ---------------- Code Intelligence ----------------
+  ;; use LSP client (eglot, lsp-bridge)
 
   ;; ---------------- Virtual Environments ----------------
+  ;; workflow: pyvenv activate -> revert-buffer ("s-u")
+  ;; [trick]: "revert-buffer" triggers eglot reboot and modeline update of python version
   (use-package pyvenv
     :ensure t
-    :bind (:map python-mode-map
+    :bind (:map python-base-mode-map
                 ("M-s C-a"  .  pyvenv-activate)  ;; venv at current folder
                 ("M-s C-d"  .  pyvenv-deactivate)
                 ("M-s C-e"  .  pyvenv-workon))   ;; select venv
@@ -70,11 +72,13 @@
                       (copy-marker (region-end)))
                      (t (line-end-position)))))
       (python-shell-send-region beg end)))
-  (define-key python-mode-map (kbd "C-c C-j") 'python-shell-send-line)
-  (easy-menu-define-key python-menu [send-line]
-                        '(menu-item "Eval line" python-shell-send-line
-                                    "Eval line in inferior Python session")
-                        "Eval region")
+  ;; add keybinding and menu item
+  (dolist (map '(python-mode-map python-ts-mode-map))
+    (define-key (symbol-value map) (kbd "C-c C-j") 'python-shell-send-line)
+    (easy-menu-add-item python-ts-mode-map
+                        '(menu-bar  "Python")
+                        ["Eval line" python-shell-send-line :help "Eval line in inferior Python session"]
+                        "Eval region"))
 
   ;; ---------------- Auto-completion ----------------
   ;; use LSP: lsp-mode ("init-lsp.el") or lsp-bridge ("init-lsp-bridge.el")
@@ -86,16 +90,14 @@
                         'python (concat "-m pdb " (file-name-nondirectory
                                                    buffer-file-name))))))
 
-  ;; use DAP-based debugger (enabled in "init-lsp.el")
-  ;; if not default "python", specify here:
-  ;; (setq dap-python-executable "python3"))
+  ;; use DAP via /dape/ mode for debugging (see "init-dap.el")
 
   ;; ---------------- Running script in shell ----------------
-  (add-hook 'python-mode-hook
+  (add-hook 'python-base-mode-hook
             (lambda () (set (make-local-variable 'compile-command)
                        (concat "python " buffer-file-name))))
-  :bind (:map python-mode-map
-              ("M-s R"  .  compile))
+  :bind (:map python-base-mode-map
+              ("<f12>"  .  compile))
 
   ) ;; End of python-mode
 

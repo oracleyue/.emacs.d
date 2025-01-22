@@ -12,8 +12,8 @@
 ;; 5. kill the sentence :: "M-k"; go the beginning/end of the sentence :: "M-a/e"
 ;; 6. "C-c &" =reftex-view-crossref= display cross-ref info
 ;; 7. "C-q "" insert the double quote ", instead of ``''
-;; 8. "M-<tab>" complete macros
-;; 9. "C-." flyspell auto correct words
+;; 8. TeX-complete-symbol
+;; 9. "C-." flyspell-auto-correct-words
 ;; 10."C-c _" to query for master files
 
 
@@ -33,6 +33,30 @@
   (setq auto-mode-alist
         (append '(("\\.tikz\\'" . latex-mode))
                 auto-mode-alist))
+
+  ;; Toggle using of variable-width fonts
+  (setq variable-pitch-flag nil)
+  (defun zyue/auctex-toggle-variable-pitch ()
+    "Use variable-width fonts in AucTeX."
+    (interactive)
+    ;; configure faces
+    (set-face-attribute 'variable-pitch nil :height 170)
+    (set-face-attribute 'fixed-pitch nil  :font (face-attribute 'default :font))
+    (set-face-attribute 'font-latex-sedate-face   nil :inherit 'fixed-pitch)
+    (set-face-attribute 'font-latex-math-face     nil :inherit 'fixed-pitch)
+    ;; toggle variable-pitch-mode
+    (if (not variable-pitch-flag)
+        (progn
+          (variable-pitch-mode t)
+          (setq variable-pitch-flag t)
+          (setq line-spacing 0.4)
+          (setq-local fill-column 95))
+      (variable-pitch-mode -1)
+      (setq variable-pitch-flag nil)
+      (setq line-spacing nil)
+      (setq-local fill-column 75))
+    ;; refresh
+    (redraw-display))
 
   ;; Disable default TeX pairing
   (setq-default TeX-insert-braces nil)
@@ -262,12 +286,10 @@
 ;; Keybinding definitions
 (eval-after-load "latex"
   '(progn
-     ;; refresh and fontify buffer: =font-lock-fontify-buffer=
-     ;; macro completions (flushed by flyspell.el)
-     (define-key LaTeX-mode-map (kbd "M-<tab>") 'TeX-complete-symbol)
      (define-key LaTeX-mode-map (kbd "C-M-a") 'LaTeX-find-matching-begin)
-     (define-key LaTeX-mode-map (kbd "C-M-e") 'LaTeX-find-matching-end)
-     ))
+     (define-key LaTeX-mode-map (kbd "C-M-e") 'LaTeX-find-matching-end)))
+;; refresh and fontify buffer: =font-lock-fontify-buffer=
+;; auto-completion: TeX-complete-symbol
 
 ;; Use /cdlatex/ to accelerate math typing
 (use-package cdlatex

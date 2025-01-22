@@ -9,7 +9,7 @@
   :type 'string)
 
 ;; Frame   (note: [96, 33] in Thinkpad)
-(setq default-frame-alist '((width . 92) (height . 56))) ;; 85/52
+(setq default-frame-alist '((width . 92) (height . 56)))
 
 ;; Transparent titlebar for Mac OS X
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
@@ -54,7 +54,9 @@
         (throw 'loop t))))
   ;; Specify variable-width font
   (catch 'loop
-    (dolist (font '("Times New Roman" "Roboto"))
+    (dolist (font '("Bookerly"
+                    "Times New Roman"  ;; serif
+                    "Roboto"))         ;; sans
       (when (member font (font-family-list))
         (set-face-attribute 'variable-pitch frame :font font)
         (throw 'loop t))))
@@ -126,46 +128,48 @@
 
 ;; Themes
 ;; (eclipse, doom-nord-light; doom-one, spacemacs-dark, tao-yang, elegant-light)
-(setq zyue-theme 'doom-one)
+(setq zyue-theme 'elegant-light)
 (when *is-server-m* (setq zyue-theme 'elegant-light))
 (when *is-server-c* (setq zyue-theme 'doom-one))
 (when *is-terminal* (setq zyue-theme 'spacemacs-dark))
 
-(pcase zyue-theme
-  ((or 'doom-one 'doom-nord-light)
-   (setq zyue-modeline 'doomline)
-   (use-package doom-themes
-     :custom
-     (doom-themes-treemacs-theme "doom-colors")
-     (line-spacing nil) ;; 0.1 for FiraCode
-     :config (doom-themes-visual-bell-config)))
-  ((or 'spacemacs-dark 'spacemacs-light)
-   (setq zyue-modeline 'powerline)
-   ;; (setq zyue-modeline 'spaceline)  ;; bugs on redisplay
-   (use-package spacemacs-theme))
-  ('eclipse  ;; clone from abo-abo's eclipse-theme
-   (setq zyue-modeline 'powerline)
-   (use-package eclipse-theme
-     :demand
-     :load-path "themes/eclipse-theme/"
-     :ensure nil
-     :init (require 'more-faces-eclipse-theme)))
-  ((or 'tao-yang 'tao-ying)
-   (setq zyue-modeline 'doomline)
-   (use-package tao-theme
-     :demand
-     :load-path "themes/tao-theme-emacs/"
-     :ensure nil
-     :config
-     (add-to-list 'default-frame-alist '(internal-border-width . 24))))
-  ((or 'elegant-light 'elegant-dark)
-   (use-package elegant-theme
-     :ensure nil
-     :demand
-     :load-path "themes/elegant-theme/"
-     :init   (setq elegant-modeline-disabled nil)
-     :config (setq font-userdefine-flag nil)))
-  (_ nil))
+(defun zyue/setup-theme (&optional theme)
+  "Load the theme package, and then load-theme."
+  (pcase theme
+    ((or 'doom-one 'doom-nord-light)
+     (setq zyue-modeline 'doomline)
+     (use-package doom-themes
+       :custom
+       (doom-themes-treemacs-theme "doom-colors")
+       (line-spacing nil) ;; 0.1 for FiraCode
+       :config (doom-themes-visual-bell-config)))
+    ((or 'spacemacs-dark 'spacemacs-light)
+     (setq zyue-modeline 'powerline)
+     ;; (setq zyue-modeline 'spaceline)  ;; bugs on redisplay
+     (use-package spacemacs-theme))
+    ('eclipse  ;; clone from abo-abo's eclipse-theme
+     (setq zyue-modeline 'powerline)
+     (use-package eclipse-theme
+       :demand
+       :load-path "themes/eclipse-theme/"
+       :ensure nil
+       :init (require 'more-faces-eclipse-theme)))
+    ((or 'tao-yang 'tao-ying)
+     (setq zyue-modeline 'doomline)
+     (use-package tao-theme
+       :demand
+       :load-path "themes/tao-theme-emacs/"
+       :ensure nil
+       :config
+       (add-to-list 'default-frame-alist '(internal-border-width . 24))))
+    ((or 'elegant-light 'elegant-dark)
+     (use-package elegant-theme
+       :ensure nil
+       :demand
+       :load-path "themes/elegant-theme/"
+       :init   (setq elegant-modeline-disabled nil)
+       :config (setq font-userdefine-flag nil)))
+    (_ nil)))
 
 ;; Transparent effect (alpha < 1)
 (defun zyue/set-frame-alpha (active inactive)
@@ -183,9 +187,10 @@ INACTIVE: opacity when frame is inactive (0-100)"
 (defun zyue/init-ui (&optional frame)
   ;; load theme
   (when zyue-theme
+    (zyue/setup-theme zyue-theme)
     (load-theme zyue-theme t))
   ;; load modeline style
-  (zyue/modeline-setup zyue-modeline)
+  (zyue/setup-modeline zyue-modeline)
   ;; loading after frame creations
   (when window-system
     ;; update transparent titlebar textcolor wrt themes

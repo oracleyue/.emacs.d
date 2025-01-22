@@ -68,6 +68,6 @@
        (propertize title 'face face)))))
 
 
-(provide 'init-helper)
+(provide 'init-keyhelper)
 ;; ================================================
-;; init-helper.el ends here
+;; init-keyhelper.el ends here

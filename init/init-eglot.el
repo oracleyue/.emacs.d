@@ -3,20 +3,6 @@
 ;; ================================================================
 ;; Last modified on 25 Dec 2024
 
-;; Tree-sitter
-(when *use-treesitter*
-  (use-package treesit-auto
-    :demand
-    :init
-    (setq treesit-auto-install    'prompt
-          treesit-font-lock-level 3)    ; 4 for everything
-    :config
-    (global-treesit-auto-mode)
-    ;; fix for Yasnippet: workaround for https://github.com/renzmann/treesit-auto/issues/76
-    (setq major-mode-remap-alist (treesit-auto--build-major-mode-remap-alist))
-    ))
-
-;; LSP Client
 (use-package eglot
   :ensure nil
   :hook (((python-mode python-ts-mode) . eglot-ensure)
@@ -51,10 +37,12 @@
 
   ;; Python (by default)
   ;; ------------------------------------------------
+  ;; use "pyright" in virtualenv via /pyvenv/ mode
+  ;; see "init-python.el"
 
   ;; MATLAB
   ;; ------------------------------------------------
-  ;; Warning: eglot setup seems buggy, fix to-do
+  ;; Warning: eglot setup and matlab-ls seems buggy!
   ;; (add-to-list 'eglot-server-programs
   ;;              '(octave-mode . ("matlab-ls" "--stdio")))  ;; from ~/bin/
   ;; (setq-default eglot-workspace-configuration

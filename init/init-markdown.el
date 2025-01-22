@@ -16,14 +16,15 @@
 
   ;; use variable-width fonts
   (defun zyue/markdown-use-variable-pitch ()
+    "Use variable-width fonts in Markdown mode."
+    (interactive)
     (variable-pitch-mode t)
-    (setq-local fill-column *fill-column-sans*)
+    (setq-local fill-column 90)
     ;; restore fixed-pitch for codes
     (let ((font-name (face-attribute 'default :family)))
-      (set-face-font 'markdown-pre-face font-name)
+      (set-face-font 'markdown-pre-face  font-name)
       (set-face-font 'markdown-code-face font-name)
       (set-face-font 'markdown-inline-code-face font-name)))
-  ;; (add-hook 'markdown-mode-hook 'zyue/markdown-use-variable-pitch)
 
   ;; fontify code blocks
   (setq markdown-fontify-code-blocks-natively t)

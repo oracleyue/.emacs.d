@@ -22,7 +22,6 @@
          (rfn-eshadow-update-overlay . vertico-directory-tidy)
          (minibuffer-setup . vertico-repeat-save))
   :bind (("C-'"      . vertico-suspend)
-         ("M-g M-s"  . vertico-suspend)
          ("M-g M-r"  . vertico-repeat)
          ("M-g C-r"  . vertico-repeat-select)
          :map vertico-map
@@ -33,9 +32,11 @@
   :init
   (setq vertico-posframe-poshandler
         #'posframe-poshandler-frame-center-near-bottom)
+  (setq vertico-posframe-border-width  1)
+  ;; [bug]: setting "right-fringe" freezes Emacs in find-file long paths
   (setq vertico-posframe-parameters
-        '((left-fringe . 8)  (right-fringe . 8)
-          (min-width   . 75) (alpha . 95))))
+        '((left-fringe . 8)  ;(right-fringe . 2)
+          (min-width   . 75))))
 
 (use-package nerd-icons-completion
   :when (icons-displayable-p)
@@ -101,8 +102,7 @@
 
          ;; minibuffer history
          :map minibuffer-local-map
-         ("M-s" . consult-history)            ;; orig. next-matching-history-element
-         ("M-r" . consult-history))           ;; orig. previous-matching-history-element
+         ("M-s" . consult-history))                  ;; orig. next-matching-history-element; previous-matching-history-element
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.

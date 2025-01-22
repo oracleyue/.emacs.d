@@ -8,13 +8,15 @@
 (setq dropbox (expand-file-name "~/Public/Dropbox/"))
 (cond
  (*is-server-m*
-  (dired (expand-file-name "Academia" dropbox))
-  (dired (expand-file-name "oracleyue/GTD" dropbox))
-  (dired (expand-file-name "oracleyue/Notebooks/Research" dropbox)))
+  ;; (dired (expand-file-name "Academia" dropbox))
+  (dired (expand-file-name "GTD" dropbox))
+  ;; (dired (expand-file-name "oracleyue/Notebooks/Research" dropbox))
+  )
  (*is-server-c*
   (cd (expand-file-name "Workspace" dropbox))))
 
 ;; registers for easy file opening
+(set-register ?c (cons 'file (concat user-emacs-directory "init/init-const.el")))
 (setq paper-root (concat dropbox "Academia/Journals/"))
 (set-register ?a (cons 'file (concat paper-root "NLNetSamplSL_SA/main_SA.tex")))
 (set-register ?b (cons 'file (concat paper-root "CvxClustNetData_24/main.tex")))

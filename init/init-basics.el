@@ -72,9 +72,7 @@
   (exec-path-from-shell-initialize))
 
 ;; fill-column
-(defconst *fill-column-sans* 90)
-(defconst *fill-column-mono* 72)
-(setq-default fill-column *fill-column-mono*)
+(setq-default fill-column 72)
 
 ;; file should end with a newline
 (setq-default mode-require-final-newline t)
@@ -139,12 +137,6 @@
 ;; text scale amount (=C-x C-0=)
 (setq text-scale-mode-step 1.05)
 
-;; use variable-width font types in text-mode
-;; (defun y-variable-width-text-mode ()
-;;   (interactive)
-;;   (variable-pitch-mode t))
-;; (add-hook 'text-mode-hook 'y-variable-width-text-mode)
-
 ;; keymap modification for OS X
 (when (and (string-equal system-type "darwin") nil)
   (setq mac-command-modifier 'control)  ; use command as control
@@ -170,13 +162,6 @@
 
 ;; line moving (bug on Mac: moving jaggly sometime)
 (setq line-move-visual nil)
-
-;; quick start email editing
-(defun zyue/draft-email ()
-  (interactive)
-  (find-file (expand-file-name "~/Documents/.email.tmp.md"))
-  (auto-fill-mode -1)
-  (setq-local fill-column *fill-column-mono*))
 
 ;; quick draft formulas in LaTeX
 (defun zyue/draft-formula ()
@@ -295,6 +280,7 @@
 
   ;; enable smartparens
   (add-hook 'prog-mode-hook  'turn-on-smartparens-mode)
+  (add-hook 'org-mode-hook   'turn-on-smartparens-mode)
   (add-hook 'LaTeX-mode-hook 'turn-on-smartparens-mode))
 
 ;; ----------------------------------------------

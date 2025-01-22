@@ -3,7 +3,9 @@
 ;; ================================================================
 ;; Last modified on 15 Sep 2017
 
-;; ------------- Basic Editing Extensions ---------------
+;; -------------------------------------------------------
+;; Basic Configurations on Editing
+;; -------------------------------------------------------
 
 ;; kill sentence (default use doulbe space after the period)
 (setq sentence-end-double-space nil)
@@ -14,7 +16,9 @@
 ;; default keybinding: "s-u" (s: super/win/command)
 (global-set-key (kbd "s-u") 'revert-buffer)
 
-;; if region marked, kill/copy region (default C-w/M-w); otherwise, kill/copy the current line
+;; better kill/copy:
+;; if region marked, kill/copy region (default C-w/M-w);
+;; otherwise, kill/copy the current line
 (defun zyue/kill-ring-save ()
         (interactive)
         (if (equal mark-active nil)
@@ -30,6 +34,18 @@
 (global-set-key (kbd "M-w") 'zyue/kill-ring-save)
 (global-set-key (kbd "C-w") 'zyue/kill-region)
 
+;; kill line backwards
+(defun zyue/backward-kill-line ()
+  (interactive)
+  (if visual-line-mode
+      (kill-visual-line 0)
+    (kill-line 0)
+    (indent-according-to-mode)))
+(global-set-key (kbd "C-<backspace>") 'zyue/backward-kill-line)
+
+;; enable editing or replacing when region is active, e.g. yank
+(delete-selection-mode 1)
+
 ;; unfill paragraph or region: the opposite of fill-paragraph or fill-region "M-q"
 (defun zyue/unfill-paragraph-or-region (&optional region)
   "Takes a multi-line paragraph and makes it into a single line of text."
@@ -40,30 +56,29 @@
     (fill-paragraph nil region)))
 (global-set-key (kbd "M-Q") 'zyue/unfill-paragraph-or-region)
 
-;; open a new line and jump there
-(use-package open-next-line
-  :ensure nil
-  :load-path "site-lisp"
-  :bind (("C-o" . open-next-line)
-         ("M-o" . open-previous-line)))
+;; count words in buffer or region: "M-="
 
-;; enable editing or replacing when region is active, e.g. yank
-(delete-selection-mode 1)
+;; ------- cleanup whitespaces or blanks ---------
 
-;; kill line backwards
-(defun zyue/backward-kill-line ()
-  (interactive)
-  (if visual-line-mode
-      (kill-visual-line 0)
-    (kill-line 0)
-    (indent-according-to-mode)))
-(global-set-key (kbd "C-<backspace>") 'zyue/backward-kill-line)
+;; cleanup all but 1 trailing spaces in the current line
+;; "just-one-space" ("M-SPC" or "Esc SPC")
+
+;; cleanup trailing whitespaces in the buffer when saving
+(defun auto-cleanup-whitespace ()
+  (add-hook 'before-save-hook 'delete-trailing-whitespace nil t))
+(add-hook 'prog-mode-hook  #'auto-cleanup-whitespace)
+(add-hook 'LaTeX-mode-hook #'auto-cleanup-whitespace)
+;; manually remove whitespaces (buffer or region)
+(global-set-key (kbd "M-s k") 'delete-trailing-whitespace)
+
+;; cleanup blank lines in the buffer
+;; default "C-x C-o" to call "delete-blank-lines"
+
+;; ------- More Editing-related Extensions ---------
 
 ;; align-regexp keybinding
 ;; one may prefix "C-u" for more arguments.
 (global-set-key (kbd "C-x M-a") 'align-regexp)
-
-;; ------- More Editing-related Extensions ---------
 
 ;; Comment/Uncomment Functions:
 ;; - "M-;" comment-dwim
@@ -106,28 +121,21 @@ Uses `current-date-format' for the formatting the date/time."
   (interactive)
   (insert (format-time-string "%H:%M:%S %Y-%m-%d" (current-time))))
 
+;; -------------------------------------------------------
+;; Minor Modes for Powerful Editing Functions
+;; -------------------------------------------------------
+
+;; open a new line and jump there
+(use-package open-next-line
+  :ensure nil
+  :load-path "site-lisp"
+  :bind (("C-o" . open-next-line)
+         ("M-o" . open-previous-line)))
+
 ;; adding incremental numbers to lines
+;; ERROR! in newer version Emacs
 (require 'gse-number-rect)
 (global-set-key (kbd "C-x r N") 'gse-number-rectangle)
-
-;; remove all except 1 following space (default "M-SPC" disabled due to Alfred)
-;; alternative way to "M-SPC": "Esc SPC", or use
-;; (global-set-key (kbd "M-s SPC") 'just-one-space)
-
-;; removing trailing whitespace
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-;; automatic whitespace cleanup
-(defun auto-cleanup-whitespace ()
-  (add-hook 'before-save-hook 'delete-trailing-whitespace nil t))
-(add-hook 'prog-mode-hook #'auto-cleanup-whitespace)
-(add-hook 'LaTeX-mode-hook #'auto-cleanup-whitespace)
-;; manually remove whitespaces (buffer or region)
-(global-set-key (kbd "M-s k") 'delete-trailing-whitespace)
-
-;; remote blank lines
-;; default "C-x C-o" to call "delete-blank-lines"
-
-;; ----------- Powerful Minor Modes ------------
 
 ;; /undo-tree/: better undo/redo using tree visualizer
 (use-package undo-tree
@@ -166,7 +174,7 @@ Uses `current-date-format' for the formatting the date/time."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; /Avy/: jump to char/words in tree-style
+;; /avy/: jump to char/words in tree-style
 (use-package avy
   :demand
   :bind (("M-g c"   . avy-goto-char)       ; default: C-:
@@ -178,6 +186,12 @@ Uses `current-date-format' for the formatting the date/time."
   (avy-setup-default)
   ;; restore key overwritten by "Consult" (init-vertico.el)
   :hook (after-init . (lambda () (global-set-key (kbd "M-g M-g") 'avy-goto-line))))
+
+;; /yasnippet/: a system for snippets
+(use-package yasnippet
+  :demand
+  :diminish yas-minor-mode
+  :hook (after-init . yas-global-mode))
 
 
 (provide 'init-edit)

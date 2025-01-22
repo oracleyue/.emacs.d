@@ -19,8 +19,7 @@
 ;; Line wrapping
 ;; note: "wrap at window edge" cause issues in company
 (add-hook 'prog-mode-hook
-          (lambda () (setq-default truncate-lines t)
-            (setq fill-column *fill-column-mono*)))
+          (lambda () (setq-default truncate-lines t)))
 
 ;; ---------------------------------------------
 ;; /flycheck/: modern syntax checking
@@ -138,8 +137,9 @@
               ("M-s o"   . symbol-overlay-put)
               ("M-n" . symbol-overlay-jump-next)
               ("M-p" . symbol-overlay-jump-prev)
-              ("M-s C-a" . symbol-overlay-jump-first)
-              ("M-s C-e" . symbol-overlay-jump-last)
+              ;; conflicts with "pyvenv"
+              ;; ("M-s C-a" . symbol-overlay-jump-first)
+              ;; ("M-s C-e" . symbol-overlay-jump-last)
               ("M-s C-c" . symbol-overlay-remove-all))
   :hook ((prog-mode      . symbol-overlay-mode)
          (LaTeX-mode     . (lambda () (symbol-overlay-mode -1)))

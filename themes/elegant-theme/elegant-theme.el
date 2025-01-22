@@ -3,6 +3,7 @@
 ;; Copyright 2020 Nicolas P. Rougier
 ;; -------------------------------------------------------------------
 
+(require 'faces)
 (require 'elegant-light-theme)
 
 ;;; Font and frame size
@@ -41,7 +42,8 @@
                       :family     'unspecified :slant      'unspecified
                       :weight     'unspecified :height     'unspecified
                       :underline  'unspecified :overline   'unspecified
-                      :box        'unspecified :inherit    style))
+                      :box        'unspecified
+                      :inherit    style))
 
 ;;; Mode line rendering
 (defun elegant-set-modeline ()

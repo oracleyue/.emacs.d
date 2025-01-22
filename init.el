@@ -29,10 +29,7 @@
 (require 'init-edit)
 
 ;; keybinding cheetsheet
-(require 'init-helper)
-
-;; snippets
-(require 'init-snippets)
+(require 'init-keyhelper)
 
 ;; global completion systems
 (pcase *ac-system*
@@ -68,6 +65,10 @@
 
 ;; project management
 (require 'init-projectile)
+
+;; Parsing
+(when *use-treesitter*
+  (require 'init-treesit))
 
 ;; LSP
 (pcase *lsp-client*
