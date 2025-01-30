@@ -51,15 +51,10 @@
 
 ;; /GTD Function Extensions/
 ;; refer to http://doc.norang.ca/org-mode.html
-(setq gtd-home (expand-file-name
-                "~/Public/Dropbox/GTD/"))
-(setq note-home (expand-file-name
-                 "~/Public/Dropbox/Notebooks/Research/"))
-(setq todo-file    (expand-file-name "ToDoList.org" gtd-home))
-(setq archive-file (expand-file-name "ArchivedDiary.org" gtd-home))
-(setq temp-todo-file    (expand-file-name "inbox.org" gtd-home)) ;; used by iOS app
-(setq idea-file    (expand-file-name "Ideas.org" note-home))
-(setq seminar-file   (expand-file-name "Seminars.org" note-home))
+(setq gtd-home       (expand-file-name "~/Public/Dropbox/GTD/"))
+(setq todo-file      (expand-file-name "ToDoList.org" gtd-home))
+(setq archive-file   (expand-file-name "ArchivedDiary.org" gtd-home))
+(setq temp-todo-file (expand-file-name "inbox.org" gtd-home)) ;; used by iOS app
 
 (setq org-archive-location (concat archive-file "::")) ;; "C-c C-x C-a"
 
@@ -75,10 +70,10 @@
         ("n" "Quick notes (ToDoList)" entry (file+headline todo-file "Notes")
          "* %?\nAdded on %U\n" :empty-lines 1)
         ;; research notes
-        ("i" "Ideas (Research)" entry (file idea-file)
-         "* %?\nAdded on %U\n" :empty-lines 1)
-        ("m" "Seminar notes (Research)" entry (file seminar-file)
-         "* %?\nAdded on %U\n" :empty-lines 1)
+        ;; ("i" "Ideas (Research)" entry (file idea-file)
+        ;;  "* %?\nAdded on %U\n" :empty-lines 1)
+        ;; ("m" "Seminar notes (Research)" entry (file seminar-file)
+        ;;  "* %?\nAdded on %U\n" :empty-lines 1)
         ))
 ;; (with-eval-after-load "counsel"
 ;;   (add-to-list 'ivy-initial-inputs-alist '(counsel-org-capture . "^")))
@@ -312,26 +307,66 @@
 ;; /org-roam/: bullet notes and organization
 (use-package org-roam
   :custom
-  (org-roam-directory (file-truename "~/Public/Dropbox/Notebooks/RoamNotes"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
+  (org-roam-directory (file-truename
+                       "~/Public/Dropbox/RoamNotes"))
+  (org-roam-dailies-directory "daily/")  ;; default diary directory
+  ;; (org-roam-db-gc-threshold most-positive-fixnum)  ;; upgrade performance
+  :bind (("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
-         ;; dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
+         ("C-c n l" . org-roam-buffer-toggle)  ;; show back-link window
+         ("C-c n u" . org-roam-ui-mode))       ;; visualize in browser
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)  ;; diary menu
   :config
+  (require 'org-roam-dailies)  ;; start diary function
+  (org-roam-db-autosync-mode)  ;; sync with sqlite3 database
   ;; informative interface for vertical completion
-  (setq org-roam-node-display-template (concat "${title:*} "
-                                               (propertize "${tags:20}" 'face 'org-tag)))
-  ;; auto sync with sqlite3 database for org-roam
-  (org-roam-db-autosync-mode))
-;; (use-package org-roam-ui)   ;; browser UI for /org-roam/
-;; Usage:
+  (setq org-roam-node-display-template
+        (concat "${title:*} " (propertize "${tags:20}" 'face 'org-tag)))
+
+  ;; roam capture templates
+  (setq org-roam-capture-templates
+        '(
+          ("d" "default" plain "%?"
+           :target (file+head "%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("p" "programming" plain "%?"
+           :target (file+head "Programming/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("r" "research" plain "%?"
+           :target (file+head "Research/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("v" "productivity" plain "%?"
+           :target (file+head "Productivity/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("o" "macOS" plain "%?"
+           :target (file+head "macOS/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("l" "linux" plain "%?"
+           :target (file+head "Linux/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ("e" "Emacs" plain "%?"
+           :target (file+head "Emacs/%<%Y%m%d>-${slug}.org"
+                              "#+title: ${title}\n") :unnarrowed t)
+          ))
+  ) ;End: org-roam
+
+;; browser UI for /org-roam/
+(use-package org-roam-ui
+  :after org-roam
+  :custom
+  (org-roam-ui-sync-theme      t)  ;; sync emacs theme
+  (org-roam-ui-follow          t)      ;; following note nodes
+  (org-roam-ui-update-on-save  t))
+
+;; /org-roam/ usage:
 ;; - create or search notes: "C-c n f"
-;; - create reference: [[]]
+;; - create reference: [[]] (then press <tab> to complete by corfu)
 ;; - search references: "C-c n l"
 ;; - convert a headline into a node: "org-id-get-create", "org-roam-refile"
+;; - open link: C-c C-o
+;; - manual update of database: M-x org-roam-db-sync
 
 
 (provide 'init-orgmode)

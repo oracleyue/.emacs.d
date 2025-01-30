@@ -28,15 +28,15 @@
   :config
   (setq deft-extensions '("org" "md")
         deft-default-extension "org"
-        deft-directory  "~/Public/Dropbox/Notebooks")
+        deft-directory  "~/Public/Dropbox/RoamNotes")
   (setq deft-recursive t
         deft-filter-only-filenames t))
 
-;; /deft/ too slow, use fzf and ripgrep instead
+;; /deft/ is too slow, use fzf and ripgrep instead
 (defun zyue/deft ()
   "Dired the notebook home directory."
   (interactive)
-  (progn (dired "~/Public/Dropbox/Notebooks")))
+  (progn (dired "~/Public/Dropbox/RoamNotes")))
 ;; use "M-g f" to search files
 ;; use "M-g a" to search file contents
 

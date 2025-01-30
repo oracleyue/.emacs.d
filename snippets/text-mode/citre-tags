@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
 # name: citre ctags cretation (matlab)
-# key: tag
-# group: citre
+# key: citre
 # --
 ctags
 -o

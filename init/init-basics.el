@@ -51,8 +51,8 @@
   (unbind-key key))
 
 ;; daemons and clients
-;;   - "main"    for general purpose (light-theme, startup folders)
-;;   - "coding"  for coding (dark-theme, startup folders)
+;;   - "main"  for general purpose (light-theme, startup folders)
+;;   - "code"  for coding (dark-theme, startup folders)
 ;; start emacs server: (server-start)
 ;; start daemon with name: "emacs --daemon=main"
 ;; connect to server: "emacsclient -nc --socket-name=main"

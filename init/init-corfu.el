@@ -58,7 +58,7 @@
   ;; text-mode
   (add-to-list 'completion-at-point-functions #'cape-dict)
   (add-to-list 'completion-at-point-functions #'cape-tex)
-  :bind (("C-<tab>" . completion-at-point))  ;alternative to "M-<tab>"
+  ;; :bind (("C-<tab>" . completion-at-point))  ;alternative to "M-<tab>"
   :config
   (when (eq *lsp-client* 'eglot)
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)))

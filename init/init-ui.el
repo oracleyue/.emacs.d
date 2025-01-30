@@ -128,7 +128,7 @@
 
 ;; Themes
 ;; (eclipse, doom-nord-light; doom-one, spacemacs-dark, tao-yang, elegant-light)
-(setq zyue-theme 'elegant-light)
+(setq zyue-theme 'eclipse)
 (when *is-server-m* (setq zyue-theme 'elegant-light))
 (when *is-server-c* (setq zyue-theme 'doom-one))
 (when *is-terminal* (setq zyue-theme 'spacemacs-dark))
