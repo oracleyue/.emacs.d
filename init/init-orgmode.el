@@ -12,6 +12,8 @@
 (global-set-key (kbd "C-c l") 'org-store-link) ;; "C-c C-l" to insert
 (global-set-key (kbd "C-c b") 'org-switchb)
 
+(define-key org-mode-map (kbd "C-'") nil)
+
 ;; startup styles
 (setq org-startup-folded     t
       org-startup-indented   t
@@ -48,7 +50,6 @@
 ;; use cdlatex for fast math typing
 ;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-
 ;; /GTD Function Extensions/
 ;; refer to http://doc.norang.ca/org-mode.html
 (setq gtd-home       (expand-file-name "~/Public/Dropbox/GTD/"))
@@ -75,10 +76,8 @@
         ;; ("m" "Seminar notes (Research)" entry (file seminar-file)
         ;;  "* %?\nAdded on %U\n" :empty-lines 1)
         ))
-;; (with-eval-after-load "counsel"
-;;   (add-to-list 'ivy-initial-inputs-alist '(counsel-org-capture . "^")))
 
-;; research diary: today/recent
+;; monthly gtd plan
 (defun zyue/plan ()
   "Create a research diary for this month."
   (interactive)
@@ -91,17 +90,7 @@
                  "** School\n"
                  "** Misc.\n"
                  "** Notes\n")))
-;; [Note]: use default org-archive command "C-c C-x C-a"
-;; archive of research diaries
-;; (defun zyue/archive-plan ()
-;;   "Archive the research diary of this month."
-;;   (interactive)
-;;   (progn (find-file archive-file)
-;;          (goto-char (point-max))
-;;          (insert-file todo-file)
-;;          (save-buffer)
-;;          (delete-file todo-file)  ;; clean up "ToDoList.org"
-;;          (kill-buffer "ToDoList.org")))
+;; archive monthly: use org-archive-subtree: "C-c C-x C-s"
 
 ;; Todo keywords
 (defface org-doing
@@ -133,7 +122,6 @@
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-
 ;; /Export Settings/
 
 ;; HTML
@@ -156,7 +144,6 @@
 
 ;; Markdown (use ox-gfm)
 ;; (eval-after-load "org" '(require 'ox-md nil t))
-
 
 ;; /Code Blocks and Babel/
 
@@ -189,20 +176,6 @@
 ;; structure templates
 (require 'org-tempo)
 
-;; NOT VALID after Emacs 27; to be fixed
-;; (eval-after-load 'org
-;;   '(progn
-;;      (add-to-list 'org-structure-template-alist
-;;        '("w" "#+BEGIN_WARNING\n?\n#+END_WARNING"))
-;;      (add-to-list 'org-structure-template-alist
-;;        '("tex" "#+BEGIN_LATEX\n?\n#+END_LATEX"))
-;;      (add-to-list 'org-structure-template-alist
-;;        '("fig" "#+CAPTION:?\n#+LABEL:\n#+ATTR_LaTeX: :width 2in :placement [H]"))
-;;      (add-to-list 'org-structure-template-alist
-;;        '("tbl" "#+CAPTION:?\n#+LABEL:\n#+ATTR_LaTeX: placement [H] :align |c|"))
-;;      ))
-
-
 ;; ------------------------------------------------------------
 ;; External Minor Modes
 ;; ------------------------------------------------------------
@@ -216,23 +189,6 @@
   ;; avoid choosing unicode symbols intrinsically small
   ;; "☰" "☷" "☲" "☵" "⦿" "✿" "✸" "●" "⟐" "◆" "►"
   :hook (org-mode . org-superstar-mode))
-
-;; /org-download/ for image insertion
-(use-package org-download
-  :demand
-  :bind (:map org-mode-map
-              ("M-s s" . org-download-screenshot)
-              ("M-s D" . org-download-delete))  ;; "C-c C-o" to open attached file
-  :config
-  (setq-default org-download-image-dir "./img")
-  (setq org-download-image-attr-list
-        '("#+ATTR_HTML: :width 480px :align center"))
-  (when *is-mac*
-    ;; allow "ruby" in OSX: Preferences -> Security & Privacy -> Screen Recording
-    (setq org-download-screenshot-method "screencapture -i %s"))
-  ;; show inline image in posframe ("C-c C-x C-v" to toggle)
-  ;; (setq org-download-display-inline-images 'posframe)
-  )
 
 ;; /valign/: visual alignment for tables when using variable-pitch fonts
 ;; or Chinese
@@ -248,7 +204,7 @@
   (eval-after-load "org" '(require 'ox-gfm nil t)))
 
 ;; ------------------------------------------------------------
-;; Major Extensions of Org Mode
+;; Presentation in Org Mode
 ;; ------------------------------------------------------------
 
 ;; /ox-reveal/: presentation via orgmode
@@ -265,91 +221,144 @@
   (setq org-reveal-title-slide
         "<h1>%t</h1><h3>%a</h3><h4>%e</h4><h4>%d</h4>"))
 
-;; /org-ref/: citation and cross-reference
-(use-package org-ref
-  :demand
-  :after org
-  :init
-  ;; config bibtex-completion (the backend for "ivy-bibtex" in init-ivy.el)
-  (setq bibtex-completion-bibliography
-        '("~/Public/Dropbox/Academia/latex_templ/ref/library.bib")
-        bibtex-completion-pdf-field "file"  ;; pdf file from bibtex entry
-        bibtex-completion-notes-path "~/Public/Dropbox/Notebooks/Papers/"
-        bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
-        ;; bibtex-completion-additional-search-fields '(keywords)
+;; ------------------------------------------------------------
+;; Notebook Workflow in Org mode
+;; ------------------------------------------------------------
 
-        bibtex-completion-display-formats
-        '((article       . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:20} ${title:*}")
-          (inbook        . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:20} ${title:*}")
-          (incollection  . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:20} ${title:*}")
-          (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:20} ${title:*}")
-          (t             . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:20} ${title:*}"))
-        bibtex-completion-pdf-symbol "⌘"
-        bibtex-completion-notes-symbol "✎"
-        bibtex-completion-pdf-open-function
-        (lambda (fpath) (call-process "open" nil 0 nil fpath)))
-  ;; config bibtex mode
-  (require 'bibtex)
-  (setq bibtex-autokey-year-length 4
-        bibtex-autokey-name-year-separator "-"
-        bibtex-autokey-year-title-separator "-"
-        bibtex-autokey-titleword-separator "-"
-        bibtex-autokey-titlewords 2
-        bibtex-autokey-titlewords-stretch 1
-        bibtex-autokey-titleword-length 5)
+;; /org-download/ for image insertion
+(use-package org-download
+  :demand
   :bind (:map org-mode-map
-         ("C-c ]" . org-ref-insert-link)
-         ("s-]"   . org-ref-insert-link-hydra/body)
-         ;; "C-c C-o" on org-ref key triggers "org-ref-citation-hydra/body"
-         :map bibtex-mode-map
-         ("C-c C-o" . org-ref-bibtex-hydra/body)))
+              ("C-c d" . org-download-screenshot)
+              ("C-c D" . org-download-delete))
+  :config
+  (setq-default org-download-image-dir "./img")
+  (setq org-download-image-attr-list
+        '("#+ATTR_HTML: :width 480px :align center"))
+  (when *is-mac*
+    ;; allow "ruby" in OSX: Preferences -> Security & Privacy -> Screen Recording
+    (setq org-download-screenshot-method "screencapture -i %s"))
+  ;; show inline image in posframe ("C-c C-x C-v" to toggle)
+  ;; (setq org-download-display-inline-images 'posframe)
+  ) ;End: org-download
+
+;; /Citar/: front-end to browser and act on bibliographic data
+(use-package citar
+  :demand
+  :custom
+  (citar-bibliography '("~/Public/Dropbox/Academia/library.bib"))
+  (org-cite-insert-processor   'citar)
+  (org-cite-follow-processor   'citar)
+  (org-cite-activate-processor 'citar)
+  :hook
+  (org-mode . citar-capf-setup)
+  :bind
+  (("C-x C-o" . citar-open)   ;; trigger org-roam to write notes for papers
+   :map org-mode-map
+   ("C-c ]" . org-cite-insert))
+  :config
+  (setq citar-notes-paths '("~/Public/Dropbox/RoamNotes/ref")
+        citar-file-note-extensions '("org"))
+
+  ;; embark supports
+  (use-package citar-embark
+    :after (citar embark)
+    :hook  (org-mode . citar-embark-mode))
+  ;; if you perfer the embark menu open with "org-open-at-point"
+  ;; (setq citar-at-point-function 'embark-act)
+
+  ;; icon supports
+  (defvar citar-indicator-links-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-octicon "nf-oct-link" :face 'nerd-icons-blue-alt)
+     :function #'citar-has-links
+     :padding "  "
+     :tag "has:links"))
+  (defvar citar-indicator-files-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-faicon "nf-fa-file_pdf" :face 'nerd-icons-blue)
+     :function #'citar-has-files
+     :padding "  "
+     :tag "has:files"))
+  (defvar citar-indicator-notes-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-mdicon "nf-md-notebook" :face 'nerd-icons-green)
+     :function #'citar-has-notes
+     :padding "  "
+     :tag "has:notes"))
+  (setq citar-indicators
+        (list citar-indicator-files-icons
+              citar-indicator-notes-icons
+              citar-indicator-links-icons))
+  ) ;End: citar
 
 ;; /org-roam/: bullet notes and organization
 (use-package org-roam
+  :demand
   :custom
-  (org-roam-directory (file-truename
-                       "~/Public/Dropbox/RoamNotes"))
+  (org-roam-directory (file-truename "~/Public/Dropbox/RoamNotes"))
   (org-roam-dailies-directory "daily/")  ;; default diary directory
   ;; (org-roam-db-gc-threshold most-positive-fixnum)  ;; upgrade performance
   :bind (("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
          ("C-c n l" . org-roam-buffer-toggle)  ;; show back-link window
-         ("C-c n u" . org-roam-ui-mode))       ;; visualize in browser
+         ("C-c n v" . org-roam-ui-mode)        ;; visualize in browser
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
   :bind-keymap
   ("C-c n d" . org-roam-dailies-map)  ;; diary menu
   :config
+  ;; basic
   (require 'org-roam-dailies)  ;; start diary function
   (org-roam-db-autosync-mode)  ;; sync with sqlite3 database
+
+  ;; extend type for nodes
+  (cl-defmethod org-roam-node-type ((node org-roam-node))
+    "Return the TYPE of NODE."
+    (condition-case nil
+        (file-name-nondirectory
+         (directory-file-name
+          (file-name-directory
+           (file-relative-name (org-roam-node-file node) org-roam-directory))))
+      (error "")))
   ;; informative interface for vertical completion
   (setq org-roam-node-display-template
-        (concat "${title:*} " (propertize "${tags:20}" 'face 'org-tag)))
+        (concat "${type:6} ${title:*} " (propertize "${tags:20}" 'face 'org-tag)))
 
   ;; roam capture templates
   (setq org-roam-capture-templates
-        '(
-          ("d" "default" plain "%?"
+        '(("d" "default" plain "%?"
            :target (file+head "%<%Y%m%d>-${slug}.org"
                               "#+title: ${title}\n") :unnarrowed t)
-          ("p" "programming" plain "%?"
-           :target (file+head "Programming/%<%Y%m%d>-${slug}.org"
+          ("w" "work" plain "%?"
+           :target (file+head "work/%<%Y%m%d>-${slug}.org"
                               "#+title: ${title}\n") :unnarrowed t)
-          ("r" "research" plain "%?"
-           :target (file+head "Research/%<%Y%m%d>-${slug}.org"
+          ("c" "cs" plain "%?"
+           :target (file+head "cs/%<%Y%m%d>-${slug}.org"
                               "#+title: ${title}\n") :unnarrowed t)
-          ("v" "productivity" plain "%?"
-           :target (file+head "Productivity/%<%Y%m%d>-${slug}.org"
-                              "#+title: ${title}\n") :unnarrowed t)
-          ("o" "macOS" plain "%?"
-           :target (file+head "macOS/%<%Y%m%d>-${slug}.org"
-                              "#+title: ${title}\n") :unnarrowed t)
-          ("l" "linux" plain "%?"
-           :target (file+head "Linux/%<%Y%m%d>-${slug}.org"
-                              "#+title: ${title}\n") :unnarrowed t)
-          ("e" "Emacs" plain "%?"
-           :target (file+head "Emacs/%<%Y%m%d>-${slug}.org"
+          ("s" "seminar notes" plain "%?"
+           :target (file+head "ref/%<%Y%m%d>-${slug}.org"
                               "#+title: ${title}\n") :unnarrowed t)
           ))
+
+  ;; integration of /citar/ and /org-roam/
+  (use-package citar-org-roam
+    :demand
+    :after (citar org-roam)
+    :config
+    (citar-org-roam-mode)
+    ;; define capture template
+    (setq citar-org-roam-note-title-template
+          "${title}\nauthors: ${author}\nattachment: [[${file}][pdf]]")
+    (add-to-list 'org-roam-capture-templates
+                 `("n" "paper notes" plain "%?"
+                   :target(file+head "ref/${citar-citekey}.org"
+                                     "#+title: ${note-title}\n#+filetags: :paper:\n#+created: %U\n#+last_modified: %U\n\n")
+                   :unnarrowed t))
+    (setq citar-org-roam-capture-template-key "n"))
+
   ) ;End: org-roam
 
 ;; browser UI for /org-roam/
@@ -362,11 +371,13 @@
 
 ;; /org-roam/ usage:
 ;; - create or search notes: "C-c n f"
-;; - create reference: [[]] (then press <tab> to complete by corfu)
-;; - search references: "C-c n l"
-;; - convert a headline into a node: "org-id-get-create", "org-roam-refile"
-;; - open link: C-c C-o
+;; - create paper notes: "M-x citar-open"
+;; - insert ref: "C-c n i", or [[]] then press <tab> to complete
+;; - open link: C-c C-o, or use "embark"
+;; - show backlinks: "C-c n l"
+;; advanced:
 ;; - manual update of database: M-x org-roam-db-sync
+;; - convert a headline into a node: "org-id-get-create", "org-roam-refile"
 
 
 (provide 'init-orgmode)

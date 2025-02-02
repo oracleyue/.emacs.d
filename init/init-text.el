@@ -33,8 +33,9 @@
 (eval-after-load 'flyspell
   '(progn
      (define-key flyspell-mode-map (kbd "C-.")     'flyspell-correct-previous)
-     ;; restore default keybindings
-     (define-key flyspell-mode-map (kbd "M-<tab>") 'completion-at-point)))
+     ;; restore default global keybindings
+     (define-key flyspell-mode-map (kbd "M-<tab>") nil)
+     (define-key flyspell-mode-map (kbd "C-;")     nil)))
 
 ;; ---------------------------------------------
 ;; Writing in distraction-free mode

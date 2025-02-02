@@ -161,7 +161,7 @@
 ;; /Embark/: minibuffer actions rooted in keymaps
 (use-package embark
   :bind (("C-;"   . embark-act)
-         ("M-."   . embark-dwim)     ; overrides `xref-find-definitions'
+         ("M-."   . embark-dwim)     ; good alternative: M-.
          ([remap describe-bindings] . embark-bindings) ;default: C-h b
          ("M-g H" . embark-recentf-remove))
 
