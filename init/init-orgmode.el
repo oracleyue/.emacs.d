@@ -129,20 +129,20 @@
 ;; local setting: add "#+HTML_HEAD" and "#+HTML_HEAD_EXTRA" in .org files
 ;; one can add "#+HTML_HEAD: " (leave empty) to disable global heads
 ;; (setq org-html-head-include-default-style nil)
-(setq org-html-head
-      (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
-              (getenv "HOME")
-              "/.emacs.d/templates/css/bootstrap.min.css\" />")
-      org-html-head-extra
-      (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
-              (getenv "HOME")
-              "/.emacs.d/templates/css/style.css\" />"))
-;; use newer Mathjax
-(require 'ox-html)
-(setcdr (assoc 'path org-html-mathjax-options)
-        '("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML"))
+;; (setq org-html-head
+;;       (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
+;;               (getenv "HOME")
+;;               "/.emacs.d/templates/css/bootstrap.min.css\" />")
+;;       org-html-head-extra
+;;       (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
+;;               (getenv "HOME")
+;;               "/.emacs.d/templates/css/style.css\" />"))
 
-;; Markdown (use ox-gfm)
+;; use mathjax
+;; (setcdr (assoc 'path org-html-mathjax-options)
+;;         '("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML"))
+
+;; markdown (built-in, or alternative /ox-gfm/)
 ;; (eval-after-load "org" '(require 'ox-md nil t))
 
 ;; /Code Blocks and Babel/
@@ -177,7 +177,7 @@
 (require 'org-tempo)
 
 ;; ------------------------------------------------------------
-;; External Minor Modes
+;; Minor Modes
 ;; ------------------------------------------------------------
 
 ;; /org-superstart/ for better UI
@@ -209,17 +209,15 @@
 
 ;; /ox-reveal/: presentation via orgmode
 (use-package ox-reveal
-  :demand
   :config
-  ;; use css locally or in github
-  ;; (setq org-reveal-root (concat "file://" (getenv "HOME")
-  ;;                                   "/Workspace/github/reveal.js/"))
-  ;; (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-  (setq org-reveal-theme "black")  ;; klu
-  (setq org-reveal-plugins '(highlight))
-  (setq org-reveal-progress t)
-  (setq org-reveal-title-slide
-        "<h1>%t</h1><h3>%a</h3><h4>%e</h4><h4>%d</h4>"))
+  (setq org-reveal-theme   "moon"
+        org-reveal-hlevel   2
+        org-reveal-progress t)
+  ;; use css from github or locally
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+  ;; (setq org-reveal-root "file:///home/zyue/reveal.js")
+  ;; math support
+  (setq org-reveal-mathjax t))
 
 ;; ------------------------------------------------------------
 ;; Notebook Workflow in Org mode
@@ -229,17 +227,25 @@
 (use-package org-download
   :demand
   :bind (:map org-mode-map
-              ("C-c d" . org-download-screenshot)
-              ("C-c D" . org-download-delete))
+              ;; drag-n-drop from os
+              ;; drag-n-drop from browser (!bug in Chrome)
+              ("C-c d s" . org-download-screenshot)  ;; by screenshot
+              ("C-c d c" . org-download-clipboard)   ;; from clipboard
+              ("C-c d y" . org-download-yank)        ;; from image url addr
+              ("C-c d D" . org-download-delete))
   :config
-  (setq-default org-download-image-dir "./img")
-  (setq org-download-image-attr-list
-        '("#+ATTR_HTML: :width 480px :align center"))
+  (org-download-enable)
+  (setq-default org-download-image-dir "./img/")
+  ;; show inline image ("C-c C-x C-v" to toggle)
+  (setq org-download-display-inline-images t
+        org-download-image-attr-list
+        '("#+ATTR_HTML: :width 480px :align left"))
+  ;; screenshot: require config "security & privacy" in macOS
   (when *is-mac*
-    ;; allow "ruby" in OSX: Preferences -> Security & Privacy -> Screen Recording
     (setq org-download-screenshot-method "screencapture -i %s"))
-  ;; show inline image in posframe ("C-c C-x C-v" to toggle)
-  ;; (setq org-download-display-inline-images 'posframe)
+  :hook
+  ;; disabled "yank-media" to ensure drag-drop behavior
+  (org-mode . (lambda () (kill-local-variable 'dnd-protocol-alist)))
   ) ;End: org-download
 
 ;; /Citar/: front-end to browser and act on bibliographic data
@@ -358,7 +364,6 @@
                                      "#+title: ${note-title}\n#+filetags: :paper:\n#+created: %U\n#+last_modified: %U\n\n")
                    :unnarrowed t))
     (setq citar-org-roam-capture-template-key "n"))
-
   ) ;End: org-roam
 
 ;; browser UI for /org-roam/
