@@ -9,7 +9,7 @@
   :type 'string)
 
 ;; Frame   (note: [96, 33] in Thinkpad)
-(setq default-frame-alist '((width . 92) (height . 56)))
+(setq default-frame-alist '((width . 90) (height . 56)))
 
 ;; Transparent titlebar for Mac OS X
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
@@ -35,17 +35,20 @@
 (require 'init-modeline)
 
 ;; Fonts
-(if *is-mac* (setq size-n 15.0) (setq size-n 10.5))
+(if *is-mac* (setq size-n 15) (setq size-n 10.5))
 (defun zyue/search-and-load-fonts (&optional frame)
   ;; Specify default/fixed-width fonts
   (catch 'loop
-    (dolist (font '("JetBrainsMono Nerd Font"
-                    "FiraCode Nerd Font"
-                    "RobotoMono Nerd Font" ;; fix: disable "medium" ttf!
-                    "SF Mono"              ;; Mac only
-                    "Consolas"))           ;; Windows only
+    (dolist (font '("FiraCode Nerd Font"
+                    "JetBrainsMono Nerd Font"
+                    "CaskaydiaCove Nerd Font"   ;; NF for Cascadia Code
+                    "BlexMono Nerd Font"        ;; NF for IBM Plex Mono
+                    "Hack Nerd Font"
+                    "Iosevka Nerd Font"
+                    "RobotoMono Nerd Font"))    ;; fix: disable "medium" ttf!
       (when (member font (font-family-list))
-        (setq zyue-font (font-spec :family font :size size-n))
+        (setq zyue-font (font-spec :family font :size size-n :weight 'normal))  ;normal
+        (setq-default line-spacing 0.12)  ;; enable for certain fonts
         (when font-userdefine-flag
           (set-face-attribute 'default frame :font zyue-font)
           (set-face-attribute 'fixed-pitch frame :font zyue-font))
@@ -55,17 +58,15 @@
   ;; Specify variable-width font
   (catch 'loop
     (dolist (font '("Bookerly"
-                    "Times New Roman"  ;; serif
                     "Roboto"))         ;; sans
       (when (member font (font-family-list))
         (set-face-attribute 'variable-pitch frame :font font)
         (throw 'loop t))))
   ;; Specify font for Chinese
   (catch 'loop
-    (dolist (font '("LXGW WenKai Mono"         ;; 霞鹜文楷
-                    "WenQuanYi Micro Hei Mono"
-                    "Source Han Serif SC"      ;; 思源宋体 (简、繁、日)
-                    "PingFang SC" "Microsoft Yahei"))
+    (dolist (font '("LXGW WenKai Mono"          ;; 霞鹜文楷
+                    "WenQuanYi Micro Hei Mono"  ;; 文泉驿微米黑
+                    "Source Han Serif SC"))     ;; 思源宋体 (简、繁、日)
       (when (member font (font-family-list))
         ;; Note: when LC_CTYPE=zh_CN.UTF-8, use (find-font (font-spec :name font))
         ;; since Chinese font names appear in (font-family-list) as unicode codes.
@@ -141,7 +142,6 @@
      (use-package doom-themes
        :custom
        (doom-themes-treemacs-theme "doom-colors")
-       (line-spacing nil) ;; 0.1 for FiraCode
        :config (doom-themes-visual-bell-config)))
     ((or 'spacemacs-dark 'spacemacs-light)
      (setq zyue-modeline 'powerline)

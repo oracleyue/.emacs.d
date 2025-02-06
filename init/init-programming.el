@@ -13,13 +13,39 @@
   (interactive)
   (if line-spacing
       (setq line-spacing nil)
-    (setq line-spacing 0.15))
+    (setq line-spacing 0.12))
   (redraw-frame (selected-frame)))
 
 ;; Line wrapping
 ;; note: "wrap at window edge" cause issues in company
 (add-hook 'prog-mode-hook
           (lambda () (setq-default truncate-lines t)))
+
+;; Enable font ligature (e.g., Fira Code, Jetbrain Mono)
+;; (or, use prettify-mode and define symbols manually)
+;; Ref: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+(use-package ligature
+  :disabled
+  :demand
+  :config
+  ;; enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; enable all Fira/Cascadia Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                       "\\\\" "://"))
+  ;; enables ligature checks globally in all buffers. You can also do it per mode with `ligature-mode'.
+  (global-ligature-mode t))
 
 ;; ---------------------------------------------
 ;; /flycheck/: modern syntax checking

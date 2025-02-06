@@ -34,7 +34,26 @@
 (modify-coding-system-alist 'process "*" 'utf-8)
 
 ;; display “lambda” as “λ”
-(global-prettify-symbols-mode t)  ;; it also prettify Auctex, raise issues
+;; (global-prettify-symbols-mode t)  ;; issues in latex
+;; (add-hook 'prog-mode-hook (lambda () (prettify-symbols-mode 1)))
+
+;; font ligature via prettify-mode (or use /ligature/ mode in "init-programming.el")
+(setq prettify-symbols-unprettify-at-point t)
+(defun prettify-set-and-enable ()
+  (setq prettify-symbols-alist
+        '(("lambda" . "λ")
+          ("|>"     . "▷")
+          ("<|"     . "◁")
+          ("->>"    . "↠")
+          ("->"     . "→")
+          ("<-"     . "←")
+          ("=>"     . "⇒")
+          ("~="     . "≠")
+          ("!="     . "≠")
+          ("<="     . "≤")
+          (">="     . "≥")))
+  (prettify-symbols-mode 1))
+(add-hook 'prog-mode-hook 'prettify-set-and-enable)
 
 ;; No sound
 (setq visible-bell t)

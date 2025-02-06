@@ -229,9 +229,9 @@
   :bind (:map org-mode-map
               ;; drag-n-drop from os
               ;; drag-n-drop from browser (!bug in Chrome)
-              ("C-c d s" . org-download-screenshot)  ;; by screenshot
-              ("C-c d c" . org-download-clipboard)   ;; from clipboard
-              ("C-c d y" . org-download-yank)        ;; from image url addr
+              ("C-c d s" . org-download-screenshot)  ;; screenshot
+              ("C-c d y" . org-download-clipboard)   ;; paste from clipboard
+              ("C-c d d" . org-download-yank)        ;; download from url
               ("C-c d D" . org-download-delete))
   :config
   (org-download-enable)
@@ -259,9 +259,9 @@
   :hook
   (org-mode . citar-capf-setup)
   :bind
-  (("C-x C-o" . citar-open)   ;; trigger org-roam to write notes for papers
+  (("C-c n o" . citar-open)   ;; trigger org-roam to write notes for papers
    :map org-mode-map
-   ("C-c ]" . org-cite-insert))
+   ("C-c ]"   . org-cite-insert))
   :config
   (setq citar-notes-paths '("~/Public/Dropbox/RoamNotes/ref")
         citar-file-note-extensions '("org"))
@@ -309,7 +309,10 @@
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
          ("C-c n l" . org-roam-buffer-toggle)  ;; show back-link window
-         ("C-c n v" . org-roam-ui-mode)        ;; visualize in browser
+         ("C-c n u" . org-roam-ui-mode)        ;; visualize in browser
+         ;; tags
+         ("C-c n a" . org-roam-tag-add)
+         ("C-c n A" . org-roam-tag-remove)
          :map org-roam-dailies-map
          ("Y" . org-roam-dailies-capture-yesterday)
          ("T" . org-roam-dailies-capture-tomorrow))
