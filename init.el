@@ -52,10 +52,9 @@
 ;; Text Editing (org, markdown, latex, blog)
 ;; ----------------------------------------------------------------
 (require 'init-text)              ;; generic text
-
+(require 'init-auctex)            ;; latex
 (require 'init-orgmode)           ;; org-mode
 (require 'init-markdown)          ;; markdown
-(require 'init-auctex)            ;; latex
 
 (require 'init-blog)              ;; blog
 

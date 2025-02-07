@@ -34,11 +34,9 @@
 (modify-coding-system-alist 'process "*" 'utf-8)
 
 ;; display “lambda” as “λ”
-;; (global-prettify-symbols-mode t)  ;; issues in latex
-;; (add-hook 'prog-mode-hook (lambda () (prettify-symbols-mode 1)))
-
-;; font ligature via prettify-mode (or use /ligature/ mode in "init-programming.el")
 (setq prettify-symbols-unprettify-at-point t)
+(add-hook 'prog-mode-hook (lambda () (prettify-symbols-mode 1)))
+;; ligature via prettify-mode (better use /ligature/ in "init-programming.el")
 (defun prettify-set-and-enable ()
   (setq prettify-symbols-alist
         '(("lambda" . "λ")
@@ -47,13 +45,14 @@
           ("->>"    . "↠")
           ("->"     . "→")
           ("<-"     . "←")
+          ("<->"    . "↔")
           ("=>"     . "⇒")
           ("~="     . "≠")
           ("!="     . "≠")
           ("<="     . "≤")
           (">="     . "≥")))
   (prettify-symbols-mode 1))
-(add-hook 'prog-mode-hook 'prettify-set-and-enable)
+;; (add-hook 'prog-mode-hook 'prettify-set-and-enable)
 
 ;; No sound
 (setq visible-bell t)
@@ -298,9 +297,9 @@
   ;; (show-paren-mode t)
 
   ;; enable smartparens
-  (add-hook 'prog-mode-hook  'turn-on-smartparens-mode)
   (add-hook 'org-mode-hook   'turn-on-smartparens-mode)
-  (add-hook 'LaTeX-mode-hook 'turn-on-smartparens-mode))
+  (add-hook 'LaTeX-mode-hook 'turn-on-smartparens-mode)
+  (add-hook 'prog-mode-hook  'turn-on-smartparens-mode))
 
 ;; ----------------------------------------------
 ;; /bash-completion/: TAB complete alias and functions

@@ -51,7 +51,7 @@
 (defun zyue/setup-modeline (&optional theme)
   "Interface to load the theme for modeline."
   (pcase theme
-    ('plain       (require 'plain-modeline))
+    ('plainline   (require 'zyue-plain-modeline))
     ('powerline   (zyue-use-powerline))
     ('spaceline   (zyue-use-spaceline))
     ('doomline    (zyue-use-doomline))

@@ -25,7 +25,6 @@
 ;; (or, use prettify-mode and define symbols manually)
 ;; Ref: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
 (use-package ligature
-  :disabled
   :demand
   :config
   ;; enable the "www" ligature in every possible major mode

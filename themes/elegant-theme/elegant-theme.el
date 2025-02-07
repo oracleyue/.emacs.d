@@ -9,7 +9,7 @@
 ;;; Font and frame size
 (setq default-frame-alist
       (append (list '(internal-border-width . 24)
-                    '(width  . 81) '(height . 46)
+                    '(width  . 81) '(height . 48)
                     '(font . "Roboto Mono 14")
                     '(vertical-scroll-bars . nil)
                     '(bottom-divider-width . 1))

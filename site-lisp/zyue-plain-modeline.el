@@ -92,6 +92,6 @@
                ))
 
 
-(provide 'plain-modeline)
+(provide 'zyue-plain-modeline)
 ;; ================================================================
-;; plain-modeline.el ends here
+;; zyue-plain-modeline.el ends here

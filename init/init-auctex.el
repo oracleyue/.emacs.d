@@ -21,20 +21,18 @@
   :ensure auctex
   :demand
   :hook ((LaTeX-mode . LaTeX-math-mode)  ; math mode
-         (LaTeX-mode . turn-on-reftex)   ; reftex
-         (LaTeX-mode . (lambda() (prettify-symbols-mode -1)))  ; prettify-symbols off
-         )
+         (LaTeX-mode . turn-on-reftex))   ; reftex
   :config
   (setq TeX-auto-save           t
         TeX-parse-self          t
         reftex-plug-into-AUCTeX t)  ; when reftex is turned on
 
-  ;; More extensions
+  ;; add file extensions
   (setq auto-mode-alist
         (append '(("\\.tikz\\'" . latex-mode))
                 auto-mode-alist))
 
-  ;; Toggle using of variable-width fonts
+  ;; toggle using of variable-width fonts
   (setq variable-pitch-flag nil)
   (defun zyue/auctex-toggle-variable-pitch ()
     "Use variable-width fonts in AucTeX."
@@ -58,12 +56,15 @@
     ;; refresh
     (redraw-display))
 
-  ;; Disable default TeX pairing
-  (setq-default TeX-insert-braces nil)
-  (setq-default LaTeX-electric-left-right-brace nil)
-  (eval-after-load "latex" '(define-key LaTeX-mode-map "$" nil))
+  ;; keybinding
+  (eval-after-load "latex"
+    '(progn
+       (define-key LaTeX-mode-map (kbd "C-M-a") 'LaTeX-find-matching-begin)
+       (define-key LaTeX-mode-map (kbd "C-M-e") 'LaTeX-find-matching-end)))
+  ;; refresh and fontify buffer: =font-lock-fontify-buffer=
+  ;; auto-completion: TeX-complete-symbol
 
-  ;; use /smartparens/ instead
+  ;; more pairings via /smartparens/
   (with-eval-after-load 'smartparens
     (sp-with-modes '(latex-mode LaTeX-mode)
       (sp-local-pair "\\|" "\\|"
@@ -84,7 +85,7 @@
                      :post-handlers '(sp-latex-insert-spaces-inside-pair))
       ))
 
-  ;; More math-mode in LaTeX
+  ;; more math symbols
   (setq LaTeX-math-list
         '(("<"     "prec"         "Relational" nil)
           (">"     "succ"         "Relational" nil)
@@ -114,7 +115,7 @@
           ("C-d"   "displaystyle"   "Misc" nil)     ;; overwirte \det
           ))
 
-  ;; More math-font in LaTeX
+  ;; more math fonts
   (setq LaTeX-font-list
         (quote ((1 "" "" "\\mathcal{" "}")
                 (2 "\\textbf{" "}" "\\mathbf{" "}")
@@ -130,7 +131,7 @@
                 (20 "\\texttt{" "}" "\\mathtt{" "}")
                 (21 "\\textup{" "}") )))
 
-  ;; More keywords/macro fontify
+  ;; more keywords/macro fontify
   (setq font-latex-match-textual-keywords
         '(("smallskip" "")
           ("medskip" "")
@@ -152,19 +153,35 @@
         '(("citep" "{")
           ("citet" "{")))
 
-  ;; Extend reftex-citation
+  ;; /CDLaTeX/: accelerate math typing
+  ;; usage:
+  ;;   "TAB": cdlatex-tab               "`": cdlatex-math-symbol
+  ;;   "C-c {": cdlatex-environment     "'": cdlatex-math-modify
+  (use-package cdlatex
+    :demand
+    :init
+    ;; disable its pairing (use default or /smartparens/)
+    (setq cdlatex-takeover-parenthesis nil
+          cdlatex-takeover-dollar nil)
+    :hook (LaTeX-mode . turn-on-cdlatex)
+    :config
+    ;; add keybind for default tab behavior
+    :bind (:map cdlatex-mode-map
+                ("C-<tab>" . indent-for-tab-command)))
+
+  ;; RefTeX: extend reftex-citation
   ;; http://www.gnu.org/software/auctex/manual/reftex.html#SEC52
   ;; http://tex.stackexchange.com/questions/31966/setting-up-reftex-with-biblatex-citation-commands
   (eval-after-load 'reftex-vars
     '(progn
-       (add-to-list 'TeX-style-path "~/.emacs.d/init/misc")))
+       (add-to-list 'TeX-style-path "~/.emacs.d/init/styles")))
 
-  ;; Set master files for multiple documents
+  ;; set master files for multiple documents
   ;; use "C-c _" to query for master files
   (setq-default TeX-master t)
   ;; (setq-default TeX-master 'dwim)
 
-  ;; Bibliography for RefTeX
+  ;; bibliography for RefTeX
   (setq reftex-default-bibliography
         '("./library.bib" "./ref/library.bib" "../ref/library.bib"))
   ;; (setq reftex-bibliography-commands
@@ -283,21 +300,7 @@
 
   ) ;; END of use-package(auctex)
 
-;; Keybinding definitions
-(eval-after-load "latex"
-  '(progn
-     (define-key LaTeX-mode-map (kbd "C-M-a") 'LaTeX-find-matching-begin)
-     (define-key LaTeX-mode-map (kbd "C-M-e") 'LaTeX-find-matching-end)))
-;; refresh and fontify buffer: =font-lock-fontify-buffer=
-;; auto-completion: TeX-complete-symbol
-
-;; Use /cdlatex/ to accelerate math typing
-(use-package cdlatex
-  :disabled
-  :after tex
-  :hook (LaTeX-mode . turn-on-cdlatex))
-
-;; Utility definitions
+;; Utilities
 (defun zyue/latex-remove-comments ()
   (interactive)
   (query-replace-regexp "\\(^\\| *[^\\\\]\\)%.*" "" nil nil))

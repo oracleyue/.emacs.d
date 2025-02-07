@@ -3,7 +3,6 @@
 ;; ================================================================
 ;; Last modified on 22 Oct 2020
 
-
 ;; /Basics/
 (global-font-lock-mode t)
 
@@ -19,6 +18,15 @@
       org-startup-indented   t
       org-hide-leading-stars t)
 
+;; set apps to open files in orgmode
+(setq org-file-apps (quote ((auto-mode       . emacs)
+                            ("\\.x?html?\\'" . default)
+                            ("\\.pdf\\'"     . default))))
+
+;; diminish minor ("Ind" keyword in powerbar)
+(eval-after-load "org-indent"
+  '(diminish 'org-indent-mode))
+
 ;; view styles (line wraping, fill-column)
 (defun y/set-view-style-orgmode ()
   (setq truncate-lines t)
@@ -31,24 +39,24 @@
     (setq-local fill-column 72)))
 (add-hook 'org-mode-hook #'y/set-view-style-orgmode)
 
-;; show inline images
+;; show inline images ("C-c C-x C-v" to display)
 (setq org-startup-with-inline-images t)
 (setq org-image-actual-width nil)  ;; try using width specified by #+attr_*
 
-;; highlight latex fragments
-(setq org-highlight-latex-and-related '(latex script entities))
-
-;; set apps to open files in orgmode
-(setq org-file-apps (quote ((auto-mode       . emacs)
-                            ("\\.x?html?\\'" . default)
-                            ("\\.pdf\\'"     . default))))
-
-;; diminish minor ("Ind" keyword in powerbar)
-(eval-after-load "org-indent"
-  '(diminish 'org-indent-mode))
+;; highlight latex fragments ("C-c C-x C-l" to preview)
+(setq org-highlight-latex-and-related '(native latex script entities))
 
 ;; use cdlatex for fast math typing
-;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+;; note: firstly loaded in "init-auctex.el"
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
+;; more pairings via /smartparens/
+(with-eval-after-load 'smartparens
+  (sp-with-modes '(org-mode)
+    (sp-local-pair "\\[" "\\]"
+                   :trigger "\\["
+                   :unless '(sp-point-after-word-p))
+    ))
 
 ;; /GTD Function Extensions/
 ;; refer to http://doc.norang.ca/org-mode.html
@@ -123,11 +131,10 @@
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 ;; /Export Settings/
-
-;; HTML
+;; html
 (use-package htmlize)
-;; local setting: add "#+HTML_HEAD" and "#+HTML_HEAD_EXTRA" in .org files
-;; one can add "#+HTML_HEAD: " (leave empty) to disable global heads
+;; add "#+HTML_HEAD" and "#+HTML_HEAD_EXTRA" in .org files
+;; add "#+HTML_HEAD: " (leave empty) to disable global heads
 ;; (setq org-html-head-include-default-style nil)
 ;; (setq org-html-head
 ;;       (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
@@ -139,14 +146,12 @@
 ;;               "/.emacs.d/templates/css/style.css\" />"))
 
 ;; use mathjax
-;; (setcdr (assoc 'path org-html-mathjax-options)
-;;         '("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML"))
+;; #+OPTIONS: tex:t
 
 ;; markdown (built-in, or alternative /ox-gfm/)
 ;; (eval-after-load "org" '(require 'ox-md nil t))
 
 ;; /Code Blocks and Babel/
-
 ;; use syntax highlighting in org code blocks
 (setq org-src-fontify-natively t)
 
@@ -239,7 +244,7 @@
   ;; show inline image ("C-c C-x C-v" to toggle)
   (setq org-download-display-inline-images t
         org-download-image-attr-list
-        '("#+ATTR_HTML: :width 480px :align left"))
+        '("#+ATTR_HTML: :width 480px :align center"))
   ;; screenshot: require config "security & privacy" in macOS
   (when *is-mac*
     (setq org-download-screenshot-method "screencapture -i %s"))

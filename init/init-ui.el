@@ -31,7 +31,7 @@
 (defvar font-userdefine-flag t
   "Set nil if your theme specifies a font for `default'.")
 
-;; Modeline (powerline, spaceline, doomline, plain)
+;; Modeline (powerline, spaceline, doomline)
 (require 'init-modeline)
 
 ;; Fonts
@@ -152,8 +152,7 @@
      (use-package eclipse-theme
        :demand
        :load-path "themes/eclipse-theme/"
-       :ensure nil
-       :init (require 'more-faces-eclipse-theme)))
+       :ensure nil))
     ((or 'tao-yang 'tao-ying)
      (setq zyue-modeline 'doomline)
      (use-package tao-theme
@@ -164,9 +163,9 @@
        (add-to-list 'default-frame-alist '(internal-border-width . 24))))
     ((or 'elegant-light 'elegant-dark)
      (use-package elegant-theme
-       :ensure nil
        :demand
        :load-path "themes/elegant-theme/"
+       :ensure nil
        :init   (setq elegant-modeline-disabled nil)
        :config (setq font-userdefine-flag nil)))
     (_ nil)))
